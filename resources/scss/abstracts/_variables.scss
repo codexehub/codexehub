@@ -1,0 +1,143 @@
+// ==========================================================================
+// Design tokens — CodexeHub
+// Imported after bootstrap/scss/functions, before bootstrap/scss/bootstrap
+// ==========================================================================
+
+// Brand
+$color-primary:  #165E53;
+$color-accent:   #9FC149;
+$color-white:    #FFFFFF;
+$color-black:    #000000;
+
+// Neutrals
+$color-bg:       #F8FAFC;
+$color-border:   #E5E7EB;
+$color-text:     #334155;
+$color-heading:  #0F172A;
+
+// Derived
+$color-primary-dark:   shade-color($color-primary, 20%);
+$color-primary-light:  tint-color($color-primary, 92%);
+$color-primary-tint:   tint-color($color-primary, 96%);
+$color-accent-dark:    shade-color($color-accent, 18%);
+$color-accent-light:   tint-color($color-accent, 85%);
+
+// Typography
+$font-heading: "Poppins", sans-serif;
+$font-body:    "Inter", sans-serif;
+$font-mono:    "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+// Radii
+$radius-sm: 12px;
+$radius-md: 16px;
+$radius-lg: 20px;
+
+// Shadows (soft, modern — no heavy shadows)
+$shadow-soft:    0 4px 24px rgba(15, 23, 42, .06);
+$shadow-soft-lg: 0 16px 48px rgba(15, 23, 42, .10);
+$shadow-soft-sm: 0 2px 10px rgba(15, 23, 42, .05);
+
+// Layout
+$container-custom-width: 1320px;
+$header-height: 84px;
+$topbar-height: 40px;
+
+// --------------------------------------------------------------------------
+// Bootstrap variable overrides
+// --------------------------------------------------------------------------
+$primary:    $color-primary;
+$secondary:  $color-text;
+$success:    $color-accent;
+$info:       #2563EB;
+$warning:    #F59E0B;
+$danger:     #DC2626;
+$light:      $color-bg;
+$dark:       $color-heading;
+
+$theme-colors: (
+    "primary":   $primary,
+    "secondary": $secondary,
+    "success":   $success,
+    "info":      $info,
+    "warning":   $warning,
+    "danger":    $danger,
+    "light":     $light,
+    "dark":      $dark,
+    "accent":    $color-accent
+);
+
+$body-bg:    $color-white;
+$body-color: $color-text;
+
+$headings-font-family: $font-heading;
+$headings-color:       $color-heading;
+$headings-font-weight: 800;
+$headings-line-height: 1.2;
+
+$font-family-base:       "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+$font-family-sans-serif: $font-family-base;
+$line-height-base:       1.7;
+
+$border-color:        $color-border;
+$border-radius:        $radius-sm;
+$border-radius-sm:     10px;
+$border-radius-lg:     $radius-md;
+$border-radius-xl:     $radius-lg;
+$border-radius-pill:   50rem;
+
+$box-shadow:    $shadow-soft;
+$box-shadow-lg: $shadow-soft-lg;
+$box-shadow-sm: $shadow-soft-sm;
+$enable-shadows: false;
+$enable-negative-margins: true;
+$enable-smooth-scroll: true;
+
+$link-color:         $color-primary;
+$link-hover-color:   $color-primary-dark;
+$link-decoration:    none;
+$link-hover-decoration: none;
+
+$grid-gutter-width: 2rem;
+
+$container-max-widths: (
+    sm: 540px,
+    md: 720px,
+    lg: 960px,
+    xl: 1140px,
+    xxl: $container-custom-width
+);
+
+$btn-border-radius:    $radius-sm;
+$btn-border-radius-lg: $radius-md;
+$btn-padding-y:        .75rem;
+$btn-padding-x:        1.75rem;
+$btn-padding-y-lg:     .9rem;
+$btn-padding-x-lg:     2.25rem;
+$btn-font-weight:      600;
+$btn-font-family:      $font-body;
+
+$input-border-radius:    $radius-sm;
+$input-border-color:     $color-border;
+$input-padding-y:        .75rem;
+$input-padding-x:        1.1rem;
+$input-focus-border-color: $color-primary;
+
+$card-border-radius: $radius-md;
+$card-border-color:  $color-border;
+$card-spacer-y:       1.75rem;
+$card-spacer-x:       1.75rem;
+
+$accordion-border-radius: $radius-sm;
+$accordion-border-color:  $color-border;
+$accordion-button-active-bg: $color-primary-light;
+$accordion-button-active-color: $color-primary-dark;
+
+$nav-link-font-weight: 600;
+$navbar-nav-link-padding-x: 1rem;
+
+$badge-border-radius: $radius-sm;
+$badge-font-weight: 600;
+
+$modal-content-border-radius: $radius-md;
+
+$pagination-border-radius: $radius-sm;

@@ -1,0 +1,32 @@
+.cta-band {
+    background: linear-gradient(135deg, $color-primary, #0B2620);
+    border-radius: $radius-md;
+    padding: clamp(1.75rem, 3vw, 2.5rem) clamp(1.75rem, 4vw, 3rem);
+    color: $color-white;
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: radial-gradient(circle at 85% 20%, rgba($color-accent, .25), transparent 55%);
+    }
+
+    > * { position: relative; z-index: 1; }
+
+    h2 { color: $color-white; font-size: clamp(1.3rem, 2vw, 1.6rem); }
+
+    p { color: rgba(255, 255, 255, .78); }
+
+    .cta-icon {
+        @include flex-center;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .12);
+        color: $color-accent;
+        font-size: 1.5rem;
+        flex-shrink: 0;
+    }
+}

@@ -1,0 +1,249 @@
+// Stat cards
+.admin-stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    box-shadow: $shadow-soft-sm;
+    padding: 1.35rem;
+    @include hover-lift(-3px);
+}
+
+.admin-stat-icon {
+    @include flex-center;
+    width: 52px;
+    height: 52px;
+    border-radius: $radius-sm;
+    background: $color-primary-light;
+    color: $color-primary;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.admin-stat-body {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.admin-stat-label {
+    font-size: .8125rem;
+    color: rgba($color-text, .75);
+    font-weight: 600;
+}
+
+.admin-stat-value {
+    font-family: $admin-font-heading;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: $color-heading;
+    line-height: 1.3;
+}
+
+.admin-stat-change {
+    font-size: .75rem;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: .2rem;
+
+    &--up { color: #16A34A; }
+    &--down { color: #DC2626; }
+    &--flat { color: rgba($color-text, .6); }
+}
+
+// Chart panels
+.admin-chart-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+
+    .admin-panel--wide {
+        grid-column: span 2;
+    }
+}
+
+// Tables
+.admin-table-wrap {
+    overflow-x: auto;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: .875rem;
+
+    th, td {
+        padding: .85rem 1rem;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+    thead th {
+        background: $color-bg;
+        color: rgba($color-text, .75);
+        font-weight: 700;
+        font-size: .75rem;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        border-bottom: 1px solid $color-border;
+    }
+
+    tbody tr {
+        border-bottom: 1px solid $color-border;
+
+        &:last-child { border-bottom: 0; }
+        &:hover { background: rgba($color-primary-light, .5); }
+    }
+}
+
+.admin-table-empty {
+    text-align: center;
+    color: rgba($color-text, .6);
+    padding: 2rem 1rem;
+}
+
+.admin-sort-link {
+    color: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+
+    i { font-size: .65rem; color: $color-primary; }
+}
+
+.admin-table-actions {
+    display: inline-flex;
+    gap: .4rem;
+}
+
+.admin-table-action {
+    width: 32px;
+    height: 32px;
+    border-radius: $radius-sm;
+    border: 1px solid $color-border;
+    background: $color-white;
+    color: $color-primary;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    @include transition(background-color color);
+
+    &:hover { background: $color-primary-light; }
+
+    &--danger {
+        color: #DC2626;
+        &:hover { background: rgba(220, 38, 38, .1); }
+    }
+}
+
+.admin-table-search {
+    position: relative;
+    max-width: 320px;
+    width: 100%;
+
+    i {
+        position: absolute;
+        left: .9rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba($color-text, .5);
+    }
+
+    input {
+        width: 100%;
+        padding: .6rem .9rem .6rem 2.4rem;
+        border: 1px solid $color-border;
+        border-radius: $radius-sm;
+        font-size: .875rem;
+
+        &:focus {
+            outline: none;
+            border-color: $color-primary;
+        }
+    }
+}
+
+// Badges
+.admin-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: .25rem .65rem;
+    border-radius: $radius-lg;
+    font-size: .75rem;
+    font-weight: 700;
+
+    &--success { background: rgba($color-accent, .16); color: $color-accent-dark; }
+    &--info { background: rgba(#2563EB, .12); color: #2563EB; }
+    &--warning { background: rgba(#F59E0B, .14); color: #B45309; }
+    &--danger { background: rgba(#DC2626, .1); color: #DC2626; }
+}
+
+.admin-pagination {
+    margin-top: 1.25rem;
+
+    .pagination { margin: 0; justify-content: flex-end; }
+
+    .page-link {
+        border-color: $color-border;
+        color: $color-text;
+    }
+
+    .page-item.active .page-link {
+        background: $color-primary;
+        border-color: $color-primary;
+    }
+}
+
+// Tag input (technologies)
+.admin-tag-input {
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    padding: .6rem;
+
+    input.form-control {
+        border: 0;
+        padding: .35rem 0;
+
+        &:focus { box-shadow: none; }
+    }
+}
+
+.admin-tag-input-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+
+    &:not(:empty) { margin-bottom: .5rem; }
+}
+
+.admin-tag-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    background: $color-primary-light;
+    color: $color-primary-dark;
+    border-radius: $radius-lg;
+    padding: .3rem .7rem;
+    font-size: .8125rem;
+    font-weight: 600;
+
+    button {
+        border: 0;
+        background: transparent;
+        color: inherit;
+        line-height: 1;
+        padding: 0;
+        font-size: 1rem;
+    }
+}

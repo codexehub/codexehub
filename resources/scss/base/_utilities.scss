@@ -1,0 +1,86 @@
+.section {
+    @include section-padding;
+    position: relative;
+}
+
+.section-sm {
+    padding-block: clamp(2.5rem, 4vw, 4rem);
+}
+
+.bg-soft {
+    background-color: $color-bg;
+}
+
+.bg-primary-tint {
+    background-color: $color-primary-tint;
+}
+
+.bg-dark-panel {
+    background-color: $color-heading;
+    color: rgba(255, 255, 255, .78);
+
+    h1, h2, h3, h4, h5, h6 { color: $color-white; }
+}
+
+.glass-panel {
+    @include glass;
+    border-radius: $radius-lg;
+}
+
+.rounded-custom {
+    border-radius: $radius-md;
+}
+
+.shadow-custom {
+    box-shadow: $shadow-soft;
+}
+
+.divider-line {
+    height: 1px;
+    background: $color-border;
+    border: 0;
+}
+
+.container,
+.container-xxl {
+    max-width: $container-custom-width;
+}
+
+.avatar-initials {
+    @include flex-center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: $color-primary-light;
+    color: $color-primary-dark;
+    font-family: $font-heading;
+    font-weight: 700;
+    font-size: .9rem;
+    flex-shrink: 0;
+}
+
+.icon-tile {
+    @include flex-center;
+    width: 56px;
+    height: 56px;
+    border-radius: $radius-sm;
+    background: $color-primary-light;
+    color: $color-primary;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+
+    &.icon-circle {
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        font-size: 1.25rem;
+    }
+}
+
+[data-aos] {
+    pointer-events: none;
+}
+
+[data-aos].aos-animate {
+    pointer-events: auto;
+}

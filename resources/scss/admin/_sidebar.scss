@@ -1,0 +1,128 @@
+.admin-sidebar {
+    position: fixed;
+    inset-block: 0;
+    left: 0;
+    width: $admin-sidebar-width;
+    background: $color-heading;
+    color: rgba($color-white, .82);
+    display: flex;
+    flex-direction: column;
+    z-index: 1030;
+    @include transition(width);
+    @include custom-scrollbar;
+}
+
+.admin-sidebar-brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: $admin-header-height;
+    padding: 0 1.25rem;
+    border-bottom: 1px solid rgba($color-white, .08);
+    flex-shrink: 0;
+}
+
+.admin-brand-link {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: $admin-font-heading;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: $color-white;
+    white-space: nowrap;
+    overflow: hidden;
+
+    i { color: $color-accent; font-size: 1.35rem; }
+}
+
+.admin-sidebar-collapse-btn {
+    background: rgba($color-white, .08);
+    border: 0;
+    color: $color-white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    @include transition(transform background-color);
+
+    &:hover { background: rgba($color-white, .16); }
+}
+
+.admin-sidebar-nav {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem .75rem;
+
+    ul { list-style: none; margin: 0; padding: 0; }
+
+    a {
+        display: flex;
+        align-items: center;
+        gap: .85rem;
+        padding: .7rem .85rem;
+        border-radius: $radius-sm;
+        color: rgba($color-white, .72);
+        font-weight: 600;
+        font-size: .875rem;
+        white-space: nowrap;
+        overflow: hidden;
+        margin-bottom: .2rem;
+        @include transition(background-color color);
+
+        i { font-size: 1.05rem; width: 20px; text-align: center; flex-shrink: 0; }
+
+        &:hover { background: rgba($color-white, .06); color: $color-white; }
+
+        &.active {
+            background: $color-primary;
+            color: $color-white;
+        }
+    }
+}
+
+.admin-sidebar-footer {
+    padding: 1rem .75rem 1.25rem;
+    border-top: 1px solid rgba($color-white, .08);
+    flex-shrink: 0;
+}
+
+.admin-logout-btn {
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    width: 100%;
+    padding: .7rem .85rem;
+    border-radius: $radius-sm;
+    background: transparent;
+    border: 0;
+    color: rgba($color-white, .72);
+    font-weight: 600;
+    font-size: .875rem;
+    @include transition(background-color color);
+
+    i { font-size: 1.05rem; width: 20px; text-align: center; }
+
+    &:hover { background: rgba(220, 38, 38, .18); color: $color-white; }
+}
+
+// Collapsed state (desktop)
+.admin-sidebar-collapsed {
+    .admin-sidebar { width: $admin-sidebar-collapsed-width; }
+    .admin-brand-link span,
+    .admin-nav-label { display: none; }
+    .admin-sidebar-collapse-btn i { transform: rotate(180deg); }
+    .admin-sidebar-brand { justify-content: center; padding: 0; }
+    .admin-sidebar-collapse-btn { position: absolute; right: -14px; top: 1.6rem; }
+}
+
+.admin-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba($color-heading, .5);
+    z-index: 1025;
+}

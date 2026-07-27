@@ -1,0 +1,62 @@
+body.admin-guest-body {
+    background: linear-gradient(160deg, $color-heading 0%, $color-primary-dark 55%, $color-primary 100%);
+    min-height: 100vh;
+    font-family: $admin-font-body;
+}
+
+.admin-auth-wrap {
+    min-height: 100vh;
+    @include flex-center;
+    padding: 2rem 1rem;
+}
+
+.admin-auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: $color-white;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-soft-lg;
+    padding: 2.5rem;
+}
+
+.admin-auth-brand {
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    font-family: $admin-font-heading;
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: $color-heading;
+    margin-bottom: 2rem;
+
+    i { color: $color-accent; font-size: 1.5rem; }
+}
+
+.admin-auth-title {
+    font-family: $admin-font-heading;
+    font-weight: 800;
+    font-size: 1.5rem;
+    color: $color-heading;
+    margin-bottom: .35rem;
+}
+
+.admin-auth-subtitle {
+    color: $color-text;
+    margin-bottom: 1.75rem;
+    font-size: .9375rem;
+}
+
+.admin-auth-link {
+    font-size: .875rem;
+    font-weight: 600;
+    color: $color-primary;
+
+    &:hover { color: $color-primary-dark; }
+}
+
+.admin-auth-back {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    margin-top: 1.5rem;
+}

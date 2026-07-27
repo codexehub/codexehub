@@ -1,0 +1,41 @@
+h1, .h1 { font-size: clamp(2.25rem, 3.2vw, 3.5rem); letter-spacing: -.02em; }
+h2, .h2 { font-size: clamp(1.9rem, 2.6vw, 2.75rem); letter-spacing: -.015em; }
+h3, .h3 { font-size: clamp(1.4rem, 1.6vw, 1.75rem); }
+h4, .h4 { font-size: 1.25rem; }
+
+.lead-text {
+    font-size: clamp(1.05rem, 1.2vw, 1.2rem);
+    color: $color-text;
+    line-height: 1.75;
+}
+
+.section-eyebrow {
+    @include eyebrow;
+    margin-bottom: .9rem;
+
+    &::before {
+        content: "";
+        display: inline-block;
+        width: 20px;
+        height: 2px;
+        background: $color-accent;
+    }
+}
+
+.section-heading {
+    max-width: 640px;
+
+    &.mx-auto { text-align: center; }
+}
+
+.text-gradient {
+    @include gradient-text;
+}
+
+.text-balance {
+    text-wrap: balance;
+}
+
+a {
+    @include transition(color);
+}

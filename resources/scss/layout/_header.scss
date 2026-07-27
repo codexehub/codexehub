@@ -1,0 +1,76 @@
+.topbar {
+    height: $topbar-height;
+    background: $color-primary;
+    color: rgba(255, 255, 255, .85);
+    font-size: .8125rem;
+
+    a {
+        color: rgba(255, 255, 255, .85);
+
+        &:hover { color: $color-accent; }
+    }
+
+    .topbar-links {
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+    }
+
+    .topbar-social {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        font-weight: 600;
+
+        a {
+            display: inline-flex;
+            align-items: center;
+        }
+    }
+}
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    height: $header-height;
+    @include transition(box-shadow background-color, .25s);
+
+    &.is-scrolled {
+        box-shadow: $shadow-soft;
+        border-bottom-color: $color-border;
+    }
+
+    .navbar-brand {
+        font-family: $font-heading;
+        font-weight: 800;
+        font-size: 1.4rem;
+        color: $color-heading;
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        line-height: 1.2;
+
+        > i { color: $color-accent; font-size: 1.7rem; }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+
+            span { color: $color-primary; }
+
+            small {
+                font-family: $font-body;
+                font-weight: 500;
+                font-size: .625rem;
+                letter-spacing: .02em;
+                color: $color-text;
+                text-transform: none;
+            }
+        }
+    }
+}

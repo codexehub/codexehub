@@ -1,0 +1,5 @@
+// Bootstrap functions must load first (used by our variable overrides),
+// then our overrides, then the rest of Bootstrap.
+@import "bootstrap/scss/functions";
+@import "../abstracts/variables";
+@import "bootstrap/scss/bootstrap";

@@ -1,0 +1,76 @@
+<?php
+
+use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
+use App\Http\Controllers\Admin\Auth\NewPasswordController;
+use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PlaceholderController;
+use App\Http\Controllers\Admin\PortfolioCategoryController;
+use App\Http\Controllers\Admin\PortfolioController;
+use App\Http\Controllers\Admin\PortfolioSettingController;
+use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\UserController;
+use Illuminate\Support\Facades\Route;
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware('guest')->group(function () {
+        Route::get('login', [AuthenticatedSessionController::class, 'create'])->name('login');
+        Route::post('login', [AuthenticatedSessionController::class, 'store']);
+
+        Route::get('password/reset', [PasswordResetLinkController::class, 'create'])->name('password.request');
+        Route::post('password/reset', [PasswordResetLinkController::class, 'store'])->name('password.email');
+
+        Route::get('password/reset/{token}', [NewPasswordController::class, 'create'])->name('password.reset');
+        Route::post('password/reset/confirm', [NewPasswordController::class, 'store'])->name('password.update');
+    });
+
+    Route::middleware(['auth', 'admin'])->group(function () {
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('profile', [ProfileController::class, 'edit'])->name('profile');
+        Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
+
+        Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
+
+        Route::get('users', [UserController::class, 'index'])->name('users.index');
+        Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+        Route::get('roles', [PlaceholderController::class, 'roles'])->name('roles');
+        Route::get('content', [PlaceholderController::class, 'content'])->name('content');
+        Route::get('services', [PlaceholderController::class, 'services'])->name('services');
+
+        Route::prefix('portfolio')->name('portfolio.')->group(function () {
+            Route::get('/', [PortfolioController::class, 'index'])->name('index');
+            Route::get('create', [PortfolioController::class, 'create'])->name('create');
+            Route::post('/', [PortfolioController::class, 'store'])->name('store');
+            Route::delete('images/{image}', [PortfolioController::class, 'deleteImage'])->name('images.destroy');
+            Route::post('bulk', [PortfolioController::class, 'bulk'])->name('bulk');
+
+            Route::prefix('categories')->name('categories.')->group(function () {
+                Route::get('/', [PortfolioCategoryController::class, 'index'])->name('index');
+                Route::post('/', [PortfolioCategoryController::class, 'store'])->name('store');
+                Route::get('{category}/edit', [PortfolioCategoryController::class, 'edit'])->name('edit');
+                Route::put('{category}', [PortfolioCategoryController::class, 'update'])->name('update');
+                Route::delete('{category}', [PortfolioCategoryController::class, 'destroy'])->name('destroy');
+            });
+
+            Route::get('settings/edit', [PortfolioSettingController::class, 'edit'])->name('settings');
+            Route::put('settings', [PortfolioSettingController::class, 'update'])->name('settings.update');
+
+            // Wildcard {portfolio} routes must come last so they don't swallow the static
+            // 'categories' and 'settings' paths above.
+            Route::get('{portfolio}/edit', [PortfolioController::class, 'edit'])->name('edit');
+            Route::put('{portfolio}', [PortfolioController::class, 'update'])->name('update');
+            Route::delete('{portfolio}', [PortfolioController::class, 'destroy'])->name('destroy');
+            Route::post('{portfolio}/duplicate', [PortfolioController::class, 'duplicate'])->name('duplicate');
+            Route::patch('{portfolio}/status', [PortfolioController::class, 'updateStatus'])->name('status');
+            Route::patch('{portfolio}/featured', [PortfolioController::class, 'toggleFeatured'])->name('featured');
+        });
+
+        Route::get('blog', [PlaceholderController::class, 'blog'])->name('blog');
+        Route::get('settings', [PlaceholderController::class, 'settings'])->name('settings');
+        Route::get('reports', [PlaceholderController::class, 'reports'])->name('reports');
+    });
+});

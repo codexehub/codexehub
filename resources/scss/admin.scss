@@ -1,0 +1,22 @@
+// ==========================================================================
+// CodexeHub — Admin stylesheet
+// ==========================================================================
+
+// 1. Vendor (Bootstrap source + our variable overrides — shared with the site)
+@import "vendors/bootstrap";
+
+// 2. Abstracts
+@import "abstracts/functions";
+@import "abstracts/mixins";
+
+// 3. Base (shared reset only — admin has its own typography/spacing rhythm)
+@import "base/reset";
+
+// 4. Admin layout & components
+@import "admin/variables";
+@import "admin/layout";
+@import "admin/sidebar";
+@import "admin/header";
+@import "admin/components";
+@import "admin/auth";
+@import "admin/responsive";

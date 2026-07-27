@@ -1,0 +1,24 @@
+.form-control,
+.form-select {
+    border-color: $color-border;
+
+    &:focus {
+        border-color: $color-primary;
+        box-shadow: 0 0 0 3px $color-primary-light;
+    }
+}
+
+.newsletter-inline {
+    display: flex;
+    gap: .6rem;
+
+    .form-control { flex: 1; }
+}
+
+.contact-preview-form {
+    padding: 2rem;
+    border-radius: $radius-md;
+    border: 1px solid $color-border;
+    box-shadow: $shadow-soft;
+    background: $color-white;
+}

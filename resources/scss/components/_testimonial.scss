@@ -1,0 +1,98 @@
+.testimonial-wrap {
+    max-width: 980px;
+    margin-inline: auto;
+    padding-inline: clamp(0px, 6vw, 70px);
+}
+
+.testimonial-card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    padding: clamp(1.75rem, 3vw, 3rem);
+    border-radius: $radius-lg;
+    border: 1px solid $color-border;
+    background: $color-white;
+    box-shadow: $shadow-soft;
+
+    .quote-mark {
+        flex-shrink: 0;
+        @include flex-center;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: $color-primary-light;
+        color: $color-primary;
+        font-size: 1.6rem;
+    }
+
+    .testimonial-content {
+        flex: 1 1 320px;
+
+        blockquote {
+            font-size: 1.05rem;
+            color: $color-heading;
+            margin: 0;
+        }
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: .85rem;
+        flex-shrink: 0;
+        border-left: 1px solid $color-border;
+        padding-left: 2rem;
+
+        strong { display: block; font-size: .95rem; }
+        span { font-size: .8rem; color: $color-text; }
+
+        .rating {
+            color: $color-accent-dark;
+            font-size: .75rem;
+            margin-top: .25rem;
+        }
+    }
+}
+
+.testimonial-pagination {
+    position: static !important;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: .4rem;
+
+    .swiper-pagination-bullet {
+        width: 9px;
+        height: 9px;
+        background: $color-border;
+        opacity: 1;
+        margin: 0 !important;
+    }
+
+    .swiper-pagination-bullet-active {
+        background: $color-primary;
+    }
+}
+
+.testimonial-wrap .swiper-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+
+    &.testimonial-prev { left: 0; }
+    &.testimonial-next { right: 0; }
+}
+
+@include media-breakpoint-down(md) {
+    .testimonial-card .testimonial-author {
+        border-left: 0;
+        padding-left: 0;
+        border-top: 1px solid $color-border;
+        padding-top: 1.25rem;
+        width: 100%;
+    }
+
+    .testimonial-wrap .swiper-arrow { display: none; }
+}

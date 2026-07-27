@@ -1,0 +1,43 @@
+.logo-grid {
+    gap: 1rem;
+}
+
+.logo-grid-item {
+    @include flex-center;
+    height: 64px;
+    padding-inline: 1.75rem;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    background: $color-white;
+    @include transition(border-color box-shadow);
+
+    &:hover {
+        border-color: $color-primary;
+        box-shadow: $shadow-soft;
+    }
+}
+
+.logo-mark {
+    font-family: $font-heading;
+    font-weight: 800;
+    font-size: 1.05rem;
+    color: $color-heading;
+    white-space: nowrap;
+}
+
+.swiper-arrow {
+    @include flex-center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid $color-border;
+    background: $color-white;
+    color: $color-heading;
+    @include transition(background-color color border-color);
+
+    &:hover {
+        background: $color-primary;
+        border-color: $color-primary;
+        color: $color-white;
+    }
+}

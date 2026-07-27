@@ -1,0 +1,26 @@
+.tech-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .9rem 1.1rem;
+    border-radius: $radius-sm;
+    border: 1px solid $color-border;
+    background: $color-white;
+    font-weight: 600;
+    font-size: .875rem;
+    color: $color-heading;
+    width: 100%;
+    @include transition(border-color transform);
+
+    &:hover {
+        border-color: $color-primary;
+        transform: translateY(-3px);
+    }
+}
+
+.badge-soft {
+    background: $color-primary-tint;
+    color: $color-primary-dark;
+    font-weight: 600;
+    padding: .35rem .7rem;
+}

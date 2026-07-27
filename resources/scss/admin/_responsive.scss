@@ -1,0 +1,62 @@
+@media (max-width: 991.98px) {
+    .admin-sidebar {
+        width: $admin-sidebar-width;
+        transform: translateX(-100%);
+        @include transition(transform);
+    }
+
+    .admin-sidebar-mobile-open .admin-sidebar {
+        transform: translateX(0);
+    }
+
+    .admin-sidebar-mobile-open .admin-sidebar-backdrop {
+        display: block;
+    }
+
+    .admin-main {
+        margin-left: 0 !important;
+    }
+
+    .admin-chart-grid {
+        grid-template-columns: 1fr;
+
+        .admin-panel--wide { grid-column: span 1; }
+    }
+}
+
+@media (max-width: 767.98px) {
+    .admin-header {
+        padding: 0 1.25rem;
+    }
+
+    .admin-content {
+        padding: 1.25rem;
+    }
+
+    .admin-breadcrumb span,
+    .admin-breadcrumb a {
+        font-size: .8125rem;
+    }
+
+    .admin-panel {
+        padding: 1.1rem;
+    }
+
+    .admin-stat-grid {
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    }
+
+    .admin-auth-card {
+        padding: 1.75rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .admin-stat-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-user-name {
+        display: none;
+    }
+}

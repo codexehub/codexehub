@@ -1,0 +1,76 @@
+.site-footer {
+    background: $color-black;
+    color: rgba(255, 255, 255, .65);
+    padding-top: clamp(3rem, 5vw, 5rem);
+
+    h6 {
+        color: $color-white;
+        font-size: .9rem;
+        letter-spacing: .03em;
+        text-transform: uppercase;
+        margin-bottom: 1.4rem;
+    }
+
+    a {
+        color: rgba(255, 255, 255, .65);
+
+        &:hover { color: $color-accent; }
+    }
+
+    .footer-links {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: .75rem;
+    }
+
+    .footer-brand {
+        font-family: $font-heading;
+        font-weight: 800;
+        font-size: 1.4rem;
+        color: $color-white;
+    }
+
+    .footer-contact-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: .55rem;
+        line-height: 1.5;
+
+        i { color: $color-accent; margin-top: .2rem; flex-shrink: 0; }
+    }
+
+    .footer-social {
+        display: flex;
+        gap: .75rem;
+        margin-top: 1.25rem;
+
+        a {
+            @include flex-center;
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .08);
+
+            &:hover {
+                background: $color-accent;
+                color: $color-heading;
+            }
+        }
+    }
+
+    .footer-bottom {
+        margin-top: clamp(2.5rem, 4vw, 3.5rem);
+        padding-block: 1.5rem;
+        border-top: 1px solid rgba(255, 255, 255, .1);
+        font-size: .85rem;
+
+        .footer-legal {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+    }
+}

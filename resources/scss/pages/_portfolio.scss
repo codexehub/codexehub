@@ -1,0 +1,189 @@
+// ---- Breadcrumb hero ----
+.breadcrumb-hero {
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, $color-primary, #0B2620);
+    padding-block: clamp(2.25rem, 4vw, 3.25rem);
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba(255, 255, 255, .07) 1px, transparent 1px);
+        background-size: 22px 22px;
+    }
+
+    .container-xxl { position: relative; z-index: 1; }
+
+    h1 {
+        color: $color-white;
+        margin-bottom: .6rem;
+
+        span { color: $color-accent; }
+    }
+
+    .hero-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        font-size: .85rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, .55);
+
+        a { color: rgba(255, 255, 255, .85); }
+        a:hover { color: $color-accent; }
+        i { font-size: .7rem; color: rgba(255, 255, 255, .4); }
+        span { color: $color-accent; }
+    }
+
+    p {
+        color: rgba(255, 255, 255, .78);
+        font-size: 1rem;
+        margin: 0;
+    }
+
+    @include media-breakpoint-down(lg) {
+        p { margin-top: .5rem; }
+    }
+}
+
+// ---- Filter + sort toolbar ----
+.portfolio-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2.5rem;
+}
+
+.portfolio-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem;
+
+    button {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .6rem 1.2rem;
+        border-radius: $radius-lg;
+        border: 1px solid $color-border;
+        background: $color-white;
+        font-size: .85rem;
+        font-weight: 600;
+        color: $color-text;
+        @include transition(background-color color border-color);
+
+        &:hover { border-color: $color-primary; color: $color-primary; }
+
+        &.is-active {
+            background: $color-primary;
+            border-color: $color-primary;
+            color: $color-white;
+        }
+    }
+}
+
+.portfolio-sort {
+    .form-select {
+        min-width: 170px;
+        font-size: .85rem;
+        font-weight: 600;
+    }
+}
+
+// ---- Project card ----
+.project-thumb {
+    .thumb-dot {
+        position: absolute;
+        top: .9rem;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .3);
+
+        &:nth-child(1) { left: .9rem; }
+        &:nth-child(2) { left: 1.7rem; }
+        &:nth-child(3) { left: 2.5rem; }
+    }
+}
+
+// ---- Sidebar ----
+.portfolio-sidebar {
+    position: sticky;
+    top: calc(#{$header-height} + #{$topbar-height} + 1.5rem);
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.sidebar-cta-card {
+    padding: 1.75rem;
+    border-radius: $radius-md;
+    background: $color-white;
+    border: 1px solid $color-border;
+    box-shadow: $shadow-soft;
+
+    h4 {
+        font-size: 1.15rem;
+        margin-bottom: 1rem;
+        position: relative;
+        padding-bottom: .75rem;
+
+        &::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 32px;
+            height: 3px;
+            background: $color-accent;
+        }
+    }
+
+    p {
+        font-size: .875rem;
+        color: $color-text;
+        margin-bottom: 1.25rem;
+
+        strong { color: $color-heading; }
+    }
+
+    .btn { width: 100%; justify-content: center; }
+}
+
+.sidebar-stats-card {
+    padding: 1.75rem;
+    border-radius: $radius-md;
+    background: $color-white;
+    border: 1px solid $color-border;
+    box-shadow: $shadow-soft;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.sidebar-stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+
+    .icon-tile { width: 46px; height: 46px; font-size: 1.15rem; }
+
+    strong {
+        display: block;
+        font-family: $font-heading;
+        font-size: 1.25rem;
+        color: $color-heading;
+    }
+
+    span {
+        font-size: .8rem;
+        color: $color-text;
+    }
+}
+
+@include media-breakpoint-down(lg) {
+    .portfolio-sidebar { position: static; }
+}

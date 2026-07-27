@@ -1,0 +1,128 @@
+body.admin-body {
+    background: $color-bg;
+    font-family: $admin-font-body;
+    color: $color-text;
+}
+
+.admin-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.admin-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    margin-left: $admin-sidebar-width;
+    @include transition(margin-left);
+}
+
+.admin-sidebar-collapsed .admin-main {
+    margin-left: $admin-sidebar-collapsed-width;
+}
+
+.admin-content {
+    flex: 1;
+    padding: 2rem;
+}
+
+.admin-page-heading {
+    margin-bottom: 1.75rem;
+
+    h1 {
+        font-family: $admin-font-heading;
+        font-weight: 800;
+        font-size: 1.65rem;
+        color: $color-heading;
+        margin-bottom: .25rem;
+    }
+
+    p {
+        color: $color-text;
+        margin: 0;
+    }
+}
+
+.admin-footer {
+    height: $admin-footer-height;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    font-size: .8125rem;
+    color: rgba($color-text, .7);
+    border-top: 1px solid $color-border;
+    background: $color-white;
+}
+
+.admin-panel {
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    box-shadow: $shadow-soft-sm;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+
+    &--narrow {
+        max-width: 640px;
+    }
+}
+
+.admin-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+
+    h2 {
+        font-family: $admin-font-heading;
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: $color-heading;
+        margin: 0;
+    }
+
+    &--toolbar {
+        margin-bottom: 1rem;
+    }
+}
+
+.admin-panel-link {
+    font-size: .875rem;
+    font-weight: 600;
+    color: $color-primary;
+
+    &:hover { color: $color-primary-dark; }
+}
+
+.admin-empty-state {
+    text-align: center;
+    padding: 3.5rem 1.5rem;
+    color: $color-text;
+
+    i {
+        font-size: 2.5rem;
+        color: $color-accent;
+        margin-bottom: 1rem;
+        display: inline-block;
+    }
+
+    h2 {
+        font-family: $admin-font-heading;
+        font-size: 1.15rem;
+        color: $color-heading;
+        margin-bottom: .5rem;
+    }
+
+    p {
+        max-width: 420px;
+        margin-inline: auto;
+    }
+}
+
+.admin-form-divider {
+    border: 0;
+    border-top: 1px solid $color-border;
+    margin: 1.5rem 0;
+}

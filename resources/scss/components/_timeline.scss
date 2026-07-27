@@ -1,0 +1,59 @@
+.process-timeline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem 1rem;
+    position: relative;
+    counter-reset: step;
+
+    .process-step {
+        flex: 1 1 180px;
+        max-width: 220px;
+        text-align: center;
+        position: relative;
+
+        .step-icon {
+            @include flex-center;
+            width: 64px;
+            height: 64px;
+            margin: 0 auto .9rem;
+            border-radius: 50%;
+            background: $color-white;
+            border: 2px solid $color-border;
+            color: $color-primary;
+            font-size: 1.4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .step-number {
+            display: block;
+            font-family: $font-heading;
+            font-weight: 800;
+            font-size: .8rem;
+            color: $color-accent-dark;
+            margin-bottom: .4rem;
+        }
+
+        h4 { font-size: .95rem; margin-bottom: .4rem; }
+
+        p { font-size: .8rem; color: $color-text; margin: 0; }
+    }
+}
+
+@include media-breakpoint-up(lg) {
+    .process-timeline {
+        flex-wrap: nowrap;
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 32px;
+            left: 0;
+            right: 0;
+            height: 0;
+            border-top: 2px dashed $color-border;
+            z-index: 0;
+        }
+    }
+}
