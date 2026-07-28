@@ -41,6 +41,10 @@
     border: 0;
 }
 
+.text-accent {
+    color: $color-accent-dark;
+}
+
 .container,
 .container-xxl {
     max-width: $container-custom-width;
@@ -74,6 +78,11 @@
         height: 46px;
         border-radius: 50%;
         font-size: 1.25rem;
+    }
+
+    &.icon-circle-dark {
+        background: $color-primary;
+        color: $color-white;
     }
 }
 

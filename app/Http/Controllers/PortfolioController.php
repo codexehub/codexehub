@@ -30,13 +30,13 @@ class PortfolioController extends Controller
     {
         abort_unless($portfolio->status === 'active', 404);
 
-        $portfolio->load(['category', 'technologies', 'images']);
+        $portfolio->load(['category', 'technologies', 'images', 'highlights', 'results']);
 
         $relatedPortfolios = Portfolio::query()
             ->active()
             ->where('category_id', $portfolio->category_id)
             ->where('id', '!=', $portfolio->id)
-            ->with(['category', 'images'])
+            ->with(['category', 'images', 'technologies'])
             ->limit(3)
             ->get();
 

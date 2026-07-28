@@ -1,0 +1,339 @@
+// ==========================================================================
+// About Us page
+// ==========================================================================
+
+// ---- Hero ----
+.about-hero {
+    padding-bottom: clamp(4.5rem, 9vw, 7rem);
+
+    .hero-breadcrumb-mini {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        font-size: .8rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, .55);
+        margin-bottom: 1.25rem;
+
+        a { color: rgba(255, 255, 255, .85); }
+        a:hover { color: $color-accent; }
+        i { font-size: .65rem; color: rgba(255, 255, 255, .4); }
+        span { color: $color-accent; }
+    }
+}
+
+.about-hero-visual {
+    min-height: 340px;
+
+    .badge-about-award {
+        top: 6%;
+        right: -6%;
+    }
+}
+
+@include media-breakpoint-down(sm) {
+    .about-hero-visual .badge-about-award { display: none; }
+}
+
+// ---- Company introduction ----
+.about-photo-panel {
+    position: relative;
+}
+
+.photo-panel-window {
+    border-radius: $radius-lg;
+    overflow: hidden;
+    border: 1px solid $color-border;
+    box-shadow: $shadow-soft-lg;
+    background: $color-white;
+}
+
+.photo-panel-header {
+    display: flex;
+    gap: 6px;
+    padding: .85rem 1rem;
+    background: $color-bg;
+    border-bottom: 1px solid $color-border;
+
+    span {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: $color-border;
+
+        &:nth-child(1) { background: #EF4444; }
+        &:nth-child(2) { background: #F59E0B; }
+        &:nth-child(3) { background: $color-accent; }
+    }
+}
+
+.photo-panel-body {
+    padding: clamp(2.5rem, 6vw, 4rem) 2rem;
+    min-height: 320px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    background: linear-gradient(135deg, $color-primary-tint, $color-accent-light);
+}
+
+.photo-panel-title {
+    @include eyebrow;
+    color: $color-primary;
+    margin-bottom: 1.5rem;
+}
+
+.photo-panel-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+
+    li {
+        display: flex;
+        align-items: center;
+        gap: .65rem;
+        font-family: $font-heading;
+        font-weight: 700;
+        color: $color-heading;
+        font-size: 1.05rem;
+    }
+
+    i { color: $color-primary; font-size: 1.15rem; }
+}
+
+.photo-stat-badge {
+    position: absolute;
+    left: 1.5rem;
+    bottom: -1.5rem;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: .85rem;
+    background: $color-primary;
+    color: $color-white;
+    padding: 1rem 1.5rem;
+    border-radius: $radius-md;
+    box-shadow: $shadow-soft-lg;
+
+    .icon-tile { background: rgba(255, 255, 255, .15); color: $color-accent; }
+
+    strong { display: block; font-family: $font-heading; font-size: 1.35rem; }
+    span { font-size: .75rem; color: rgba(255, 255, 255, .75); }
+}
+
+@include media-breakpoint-down(sm) {
+    .photo-stat-badge { left: 1rem; padding: .85rem 1.1rem; }
+}
+
+.about-info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1.5rem;
+    margin-top: 2rem;
+}
+
+.about-info-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .85rem;
+
+    h4 { font-size: .95rem; margin-bottom: .3rem; }
+    p { font-size: .8rem; color: $color-text; margin: 0; }
+}
+
+@include media-breakpoint-down(sm) {
+    .about-info-grid { grid-template-columns: 1fr; }
+}
+
+// ---- Stats row ----
+.about-stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    background: $color-white;
+    border: 1px solid $color-border;
+    border-radius: $radius-md;
+    box-shadow: $shadow-soft;
+    padding: clamp(1.5rem, 3vw, 2rem) 1rem;
+}
+
+.about-stat-item {
+    flex: 1;
+    min-width: 33.33%;
+    text-align: center;
+    padding: .75rem 1rem;
+    border-right: 1px solid $color-border;
+
+    &:last-child { border-right: 0; }
+
+    .icon-tile { margin: 0 auto .75rem; }
+
+    strong {
+        display: block;
+        font-family: $font-heading;
+        font-size: clamp(1.2rem, 2vw, 1.4rem);
+        color: $color-heading;
+    }
+
+    span { font-size: .8rem; color: $color-text; }
+}
+
+@include media-breakpoint-down(lg) {
+    .about-stat-item:nth-child(3n) { border-right: 0; }
+}
+
+@include media-breakpoint-down(sm) {
+    .about-stat-item { min-width: 50%; }
+    .about-stat-item:nth-child(3n) { border-right: 1px solid $color-border; }
+    .about-stat-item:nth-child(2n) { border-right: 0; }
+}
+
+// ---- Team ----
+.team-card {
+    height: 100%;
+    border-radius: $radius-md;
+    overflow: hidden;
+    border: 1px solid $color-border;
+    background: $color-white;
+    @include hover-lift(-5px);
+}
+
+.team-photo {
+    aspect-ratio: 1;
+    @include flex-center;
+    background: linear-gradient(135deg, $color-primary-tint, $color-accent-light);
+    color: $color-primary;
+    font-size: 3rem;
+}
+
+.team-body {
+    padding: 1.35rem;
+    text-align: center;
+
+    h4 { font-size: 1rem; margin-bottom: .15rem; }
+    span { display: block; font-size: .8rem; color: $color-text; margin-bottom: 1rem; }
+}
+
+.team-social {
+    display: flex;
+    justify-content: center;
+    gap: .5rem;
+
+    a {
+        @include flex-center;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: $color-primary-light;
+        color: $color-primary-dark;
+        font-size: .85rem;
+        @include transition(background-color color);
+
+        &:hover { background: $color-primary; color: $color-white; }
+    }
+}
+
+.team-swiper { padding-bottom: .25rem; overflow: visible; }
+
+.team-swiper .swiper-slide { height: auto; }
+
+// ---- Why choose CodexeHub / Our journey ----
+.why-choose-panel {
+    position: relative;
+    overflow: hidden;
+    height: 100%;
+    padding: clamp(1.75rem, 3vw, 2.25rem);
+    border-radius: $radius-md;
+    background: linear-gradient(160deg, $color-primary, #0B2620);
+    color: $color-white;
+
+    h3 { color: $color-white; font-size: 1.3rem; margin-bottom: 1.75rem; }
+
+    .why-choose-decor {
+        position: absolute;
+        right: -18px;
+        bottom: -18px;
+        font-size: 7rem;
+        color: rgba(255, 255, 255, .06);
+        z-index: 0;
+    }
+}
+
+.why-choose-grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem 1.25rem;
+}
+
+.why-choose-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+
+    .icon-tile {
+        width: 40px;
+        height: 40px;
+        font-size: 1.05rem;
+        background: rgba(255, 255, 255, .12);
+        color: $color-accent;
+    }
+
+    h4 { color: $color-white; font-size: .875rem; margin-bottom: .25rem; }
+    p { color: rgba(255, 255, 255, .68); font-size: .75rem; margin: 0; }
+}
+
+@include media-breakpoint-down(sm) {
+    .why-choose-grid { grid-template-columns: 1fr; }
+}
+
+.journey-panel {
+    height: 100%;
+    padding: clamp(1.75rem, 3vw, 2.25rem);
+    border-radius: $radius-md;
+    background: $color-bg;
+    border: 1px solid $color-border;
+
+    h3 { font-size: 1.3rem; margin-bottom: 1.75rem; }
+}
+
+.journey-timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+
+    li {
+        position: relative;
+        padding-left: 1.75rem;
+        padding-bottom: 1.5rem;
+        border-left: 2px solid $color-border;
+
+        &:last-child { border-left-color: transparent; padding-bottom: 0; }
+
+        &::before {
+            content: "";
+            position: absolute;
+            left: -7px;
+            top: 2px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: $color-accent;
+            border: 3px solid $color-bg;
+        }
+    }
+
+    .journey-year {
+        display: block;
+        font-family: $font-heading;
+        font-weight: 800;
+        color: $color-primary;
+        font-size: 1rem;
+        margin-bottom: .25rem;
+    }
+
+    p { font-size: .85rem; color: $color-text; margin: 0; }
+}

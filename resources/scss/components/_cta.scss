@@ -15,7 +15,12 @@
 
     > * { position: relative; z-index: 1; }
 
-    h2 { color: $color-white; font-size: clamp(1.3rem, 2vw, 1.6rem); }
+    h2 {
+        color: $color-white;
+        font-size: clamp(1.3rem, 2vw, 1.6rem);
+
+        em { font-style: normal; color: $color-accent; }
+    }
 
     p { color: rgba(255, 255, 255, .78); }
 
@@ -28,5 +33,14 @@
         color: $color-accent;
         font-size: 1.5rem;
         flex-shrink: 0;
+    }
+
+    .mini-cta-decor {
+        position: absolute;
+        right: -14px;
+        bottom: -14px;
+        font-size: 6rem;
+        color: rgba(255, 255, 255, .08);
+        z-index: 0;
     }
 }

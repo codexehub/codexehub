@@ -57,5 +57,6 @@
     </main>
 
     @include('partials.footer')
+    @include('partials.consultation.modal')
 </body>
 </html>

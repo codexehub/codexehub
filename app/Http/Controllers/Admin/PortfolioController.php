@@ -56,6 +56,8 @@ class PortfolioController extends Controller
         $portfolio = Portfolio::create($validated);
 
         $this->syncTechnologies($portfolio, $request->get('technologies'));
+        $this->syncHighlights($portfolio, $request);
+        $this->syncResults($portfolio, $request);
         $this->handleUploads($portfolio, $request);
 
         return redirect()->route('admin.portfolio.index')->with('status', 'Project created successfully.');
@@ -64,7 +66,7 @@ class PortfolioController extends Controller
     public function edit(Portfolio $portfolio): View
     {
         $categories = PortfolioCategory::active()->orderBy('name')->get();
-        $portfolio->load('images', 'technologies');
+        $portfolio->load('images', 'technologies', 'highlights', 'results');
 
         return view('admin.pages.portfolio.edit', compact('portfolio', 'categories'));
     }
@@ -76,6 +78,8 @@ class PortfolioController extends Controller
         $portfolio->update($validated);
 
         $this->syncTechnologies($portfolio, $request->get('technologies'));
+        $this->syncHighlights($portfolio, $request);
+        $this->syncResults($portfolio, $request);
         $this->handleUploads($portfolio, $request);
 
         return redirect()->route('admin.portfolio.index')->with('status', 'Project updated successfully.');
@@ -163,6 +167,13 @@ class PortfolioController extends Controller
             'short_description' => ['required', 'string', 'max:500'],
             'description' => ['nullable', 'string'],
             'client_name' => ['nullable', 'string', 'max:255'],
+            'industry' => ['nullable', 'string', 'max:255'],
+            'location' => ['nullable', 'string', 'max:255'],
+            'duration' => ['nullable', 'string', 'max:255'],
+            'team_size' => ['nullable', 'string', 'max:255'],
+            'completed_date' => ['nullable', 'date'],
+            'challenge' => ['nullable', 'string'],
+            'solution' => ['nullable', 'string'],
             'project_url' => ['nullable', 'url', 'max:255'],
             'github_url' => ['nullable', 'url', 'max:255'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
@@ -170,13 +181,34 @@ class PortfolioController extends Controller
             'thumbnail' => ['nullable', 'image', 'max:2048'],
             'banner' => ['nullable', 'image', 'max:2048'],
             'gallery.*' => ['nullable', 'image', 'max:2048'],
+            'case_study_file' => ['nullable', 'file', 'mimes:pdf', 'max:5120'],
+            'testimonial_quote' => ['nullable', 'string'],
+            'testimonial_name' => ['nullable', 'string', 'max:255'],
+            'testimonial_role' => ['nullable', 'string', 'max:255'],
+            'testimonial_rating' => ['nullable', 'integer', 'min:1', 'max:5'],
+            'testimonial_avatar' => ['nullable', 'image', 'max:2048'],
+            'highlights_icon' => ['nullable', 'array'],
+            'highlights_icon.*' => ['nullable', 'string', 'max:100'],
+            'highlights_text' => ['nullable', 'array'],
+            'highlights_text.*' => ['nullable', 'string', 'max:255'],
+            'results_icon' => ['nullable', 'array'],
+            'results_icon.*' => ['nullable', 'string', 'max:100'],
+            'results_value' => ['nullable', 'array'],
+            'results_value.*' => ['nullable', 'string', 'max:50'],
+            'results_label' => ['nullable', 'array'],
+            'results_label.*' => ['nullable', 'string', 'max:255'],
         ]);
 
         $validated['featured'] = $request->boolean('featured');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
         $validated['slug'] = $validated['slug'] ? Str::slug($validated['slug']) : null;
 
-        unset($validated['thumbnail'], $validated['banner'], $validated['gallery']);
+        unset(
+            $validated['thumbnail'], $validated['banner'], $validated['gallery'],
+            $validated['case_study_file'], $validated['testimonial_avatar'],
+            $validated['highlights_icon'], $validated['highlights_text'],
+            $validated['results_icon'], $validated['results_value'], $validated['results_label'],
+        );
 
         return $validated;
     }
@@ -194,8 +226,69 @@ class PortfolioController extends Controller
         }
     }
 
+    private function syncHighlights(Portfolio $portfolio, Request $request): void
+    {
+        $icons = $request->input('highlights_icon', []);
+        $texts = $request->input('highlights_text', []);
+
+        $portfolio->highlights()->delete();
+
+        foreach ($texts as $index => $text) {
+            $text = trim((string) $text);
+
+            if ($text === '') {
+                continue;
+            }
+
+            $portfolio->highlights()->create([
+                'icon' => trim((string) ($icons[$index] ?? '')) ?: 'bi-check-circle',
+                'text' => $text,
+                'sort_order' => $index,
+            ]);
+        }
+    }
+
+    private function syncResults(Portfolio $portfolio, Request $request): void
+    {
+        $icons = $request->input('results_icon', []);
+        $values = $request->input('results_value', []);
+        $labels = $request->input('results_label', []);
+
+        $portfolio->results()->delete();
+
+        foreach ($values as $index => $value) {
+            $value = trim((string) $value);
+            $label = trim((string) ($labels[$index] ?? ''));
+
+            if ($value === '' || $label === '') {
+                continue;
+            }
+
+            $portfolio->results()->create([
+                'icon' => trim((string) ($icons[$index] ?? '')) ?: 'bi-graph-up-arrow',
+                'value' => $value,
+                'label' => $label,
+                'sort_order' => $index,
+            ]);
+        }
+    }
+
     private function handleUploads(Portfolio $portfolio, Request $request): void
     {
+        if ($request->hasFile('case_study_file')) {
+            if ($portfolio->case_study_file) {
+                Storage::disk('public')->delete($portfolio->case_study_file);
+            }
+            $portfolio->update(['case_study_file' => $request->file('case_study_file')->store('portfolio/case-studies', 'public')]);
+        }
+
+        if ($request->hasFile('testimonial_avatar')) {
+            if ($portfolio->testimonial_avatar) {
+                Storage::disk('public')->delete($portfolio->testimonial_avatar);
+            }
+            $portfolio->update(['testimonial_avatar' => $request->file('testimonial_avatar')->store('portfolio/testimonials', 'public')]);
+        }
+
         if ($request->hasFile('thumbnail')) {
             $portfolio->images()->where('type', 'thumbnail')->get()->each(function (PortfolioImage $image) {
                 Storage::disk('public')->delete($image->path);

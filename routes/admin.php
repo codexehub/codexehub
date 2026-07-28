@@ -3,12 +3,14 @@
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
+use App\Http\Controllers\Admin\ConsultationController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PlaceholderController;
 use App\Http\Controllers\Admin\PortfolioCategoryController;
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\PortfolioSettingController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,9 +39,26 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
         Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
+        Route::prefix('consultations')->name('consultations.')->group(function () {
+            Route::get('/', [ConsultationController::class, 'index'])->name('index');
+            Route::get('{consultation}/edit', [ConsultationController::class, 'edit'])->name('edit');
+            Route::put('{consultation}', [ConsultationController::class, 'update'])->name('update');
+            Route::delete('{consultation}', [ConsultationController::class, 'destroy'])->name('destroy');
+        });
+
         Route::get('roles', [PlaceholderController::class, 'roles'])->name('roles');
         Route::get('content', [PlaceholderController::class, 'content'])->name('content');
-        Route::get('services', [PlaceholderController::class, 'services'])->name('services');
+
+        Route::prefix('services')->name('services.')->group(function () {
+            Route::get('/', [ServiceController::class, 'index'])->name('index');
+            Route::get('create', [ServiceController::class, 'create'])->name('create');
+            Route::post('/', [ServiceController::class, 'store'])->name('store');
+            Route::get('{service}/edit', [ServiceController::class, 'edit'])->name('edit');
+            Route::put('{service}', [ServiceController::class, 'update'])->name('update');
+            Route::delete('{service}', [ServiceController::class, 'destroy'])->name('destroy');
+            Route::patch('{service}/status', [ServiceController::class, 'updateStatus'])->name('status');
+            Route::patch('{service}/featured', [ServiceController::class, 'toggleFeatured'])->name('featured');
+        });
 
         Route::prefix('portfolio')->name('portfolio.')->group(function () {
             Route::get('/', [PortfolioController::class, 'index'])->name('index');

@@ -26,6 +26,7 @@
 @import "components/forms";
 @import "components/accordion";
 @import "components/modal";
+@import "components/consultation-modal";
 @import "components/slider";
 @import "components/testimonial";
 @import "components/portfolio";
@@ -36,3 +37,7 @@
 // 6. Pages
 @import "pages/home";
 @import "pages/portfolio";
+@import "pages/portfolio-details";
+@import "pages/services";
+@import "pages/contact";
+@import "pages/about";

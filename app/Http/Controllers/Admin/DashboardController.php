@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Consultation;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\View\View;
 
@@ -11,6 +13,8 @@ class DashboardController extends Controller
     public function index(): View
     {
         $totalUsers = User::count();
+        $totalServices = Service::count();
+        $totalConsultations = Consultation::count();
 
         $stats = [
             [
@@ -29,7 +33,7 @@ class DashboardController extends Controller
             ],
             [
                 'label' => 'Total Services',
-                'value' => '9',
+                'value' => number_format($totalServices),
                 'icon' => 'bi-grid-fill',
                 'change' => '0%',
                 'trend' => 'flat',
@@ -42,11 +46,11 @@ class DashboardController extends Controller
                 'trend' => 'up',
             ],
             [
-                'label' => 'Orders',
-                'value' => '156',
-                'icon' => 'bi-bag-check-fill',
-                'change' => '-2.1%',
-                'trend' => 'down',
+                'label' => 'Consultation Requests',
+                'value' => number_format($totalConsultations),
+                'icon' => 'bi-calendar2-check-fill',
+                'change' => '0%',
+                'trend' => 'flat',
             ],
             [
                 'label' => 'Website Visits',

@@ -1,0 +1,508 @@
+// ==========================================================================
+// Portfolio Details (case study) page
+// ==========================================================================
+
+.project-hero {
+    padding-block: clamp(2.75rem, 5vw, 4rem);
+
+    .hero-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        font-size: .85rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, .55);
+
+        a { color: rgba(255, 255, 255, .85); }
+        a:hover { color: $color-accent; }
+        i { font-size: .7rem; color: rgba(255, 255, 255, .4); }
+        span { color: $color-accent; }
+    }
+
+    .project-category-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .4rem .9rem;
+        border-radius: $radius-lg;
+        background: rgba(255, 255, 255, .1);
+        border: 1px solid rgba(255, 255, 255, .18);
+        color: $color-accent;
+        font-size: .75rem;
+        font-weight: 700;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+        margin-bottom: 1rem;
+    }
+}
+
+.project-hero-visual {
+    position: relative;
+    @include flex-center;
+    min-height: 280px;
+}
+
+.project-hero-frame {
+    position: relative;
+    width: 100%;
+    border-radius: $radius-lg;
+    overflow: hidden;
+    background: $color-white;
+    border: 1px solid rgba(255, 255, 255, .14);
+    box-shadow: $shadow-soft-lg;
+
+    .mockup-bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: .7rem .9rem;
+        background: $color-bg;
+        border-bottom: 1px solid $color-border;
+
+        span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: $color-border;
+        }
+    }
+
+    img {
+        display: block;
+        width: 100%;
+        aspect-ratio: 16/10;
+        object-fit: cover;
+    }
+
+    .project-hero-frame-fallback {
+        @include flex-center;
+        aspect-ratio: 16/10;
+        color: $color-primary;
+        font-size: 3rem;
+        background: linear-gradient(135deg, $color-primary-tint, $color-accent-light);
+    }
+}
+
+// ---- Overview meta grid ----
+.overview-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 2rem;
+    margin-bottom: 1.75rem;
+}
+
+.overview-meta-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    padding-block: .25rem;
+
+    &:first-child {
+        border-right: 1px solid $color-border;
+        padding-right: 2rem;
+    }
+
+    &:last-child { padding-left: 0; }
+}
+
+.overview-meta-item {
+    display: flex;
+    align-items: flex-start;
+    gap: .75rem;
+
+    i {
+        @include flex-center;
+        width: 38px;
+        height: 38px;
+        border-radius: $radius-sm;
+        background: $color-primary-light;
+        color: $color-primary;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    strong { display: block; font-size: .95rem; color: $color-heading; }
+    span { font-size: .8rem; color: $color-text; }
+}
+
+// ---- Project highlights panel ----
+.highlights-panel {
+    padding: 1.75rem;
+    border-radius: $radius-md;
+    background: $color-bg;
+    border: 1px solid $color-border;
+
+    h4 { font-size: 1.05rem; margin-bottom: 1.25rem; }
+
+    ul li {
+        display: flex;
+        align-items: center;
+        gap: .75rem;
+        font-size: .85rem;
+        color: $color-text;
+
+        &:not(:last-child) { margin-bottom: 1.1rem; }
+    }
+}
+
+.highlight-icon-circle {
+    @include flex-center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: $color-primary-light;
+    color: $color-primary;
+    font-size: .95rem;
+    flex-shrink: 0;
+}
+
+// ---- Challenge / Solution ----
+.challenge-solution-card {
+    height: 100%;
+    padding: 1.75rem;
+    border-radius: $radius-md;
+    background: $color-white;
+    border: 1px solid $color-border;
+
+    .icon-tile { margin-bottom: 1.25rem; }
+
+    h3 { font-size: 1.15rem; margin-bottom: .75rem; }
+
+    p { color: $color-text; font-size: .925rem; margin: 0; }
+}
+
+// ---- Gallery carousel ----
+.gallery-swiper-wrap {
+    position: relative;
+    padding-inline: clamp(0px, 4vw, 56px);
+}
+
+.gallery-swiper {
+    .swiper-slide {
+        height: auto;
+    }
+
+    .gallery-frame {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        border-radius: $radius-md;
+        overflow: hidden;
+        border: 1px solid $color-border;
+        aspect-ratio: 3/4;
+    }
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        @include transition(transform);
+    }
+
+    a.gallery-frame:hover img { transform: scale(1.04); }
+}
+
+// Self-contained placeholder "screenshot" mockup for gallery slides
+// with no real image yet (mirrors the site's established mockup-imagery convention).
+.gallery-mockup {
+    background: $color-white;
+
+    .gm-bar {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        padding: .7rem .9rem;
+        background: $color-bg;
+        border-bottom: 1px solid $color-border;
+
+        span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: $color-border;
+        }
+    }
+
+    .gm-body {
+        flex: 1;
+        display: flex;
+    }
+
+    .gm-side {
+        width: 26%;
+        background: $color-heading;
+    }
+
+    .gm-main {
+        flex: 1;
+        padding: 1rem;
+        display: flex;
+        flex-direction: column;
+        gap: .75rem;
+    }
+
+    .gm-line {
+        width: 55%;
+        height: 8px;
+        border-radius: 4px;
+        background: $color-border;
+
+        &.gm-line-sm { width: 35%; }
+    }
+
+    .gm-chart {
+        display: flex;
+        align-items: flex-end;
+        gap: 6px;
+        height: 64px;
+
+        span {
+            flex: 1;
+            border-radius: 3px 3px 0 0;
+            background: $color-accent;
+
+            &:nth-child(1) { height: 40%; }
+            &:nth-child(2) { height: 65%; }
+            &:nth-child(3) { height: 50%; }
+            &:nth-child(4) { height: 85%; }
+            &:nth-child(5) { height: 70%; }
+            &:nth-child(6) { height: 55%; }
+        }
+    }
+
+    .gm-grid {
+        display: flex;
+        gap: 8px;
+        flex: 1;
+
+        span {
+            flex: 1;
+            border-radius: $radius-sm - 4px;
+
+            &:nth-child(1) { background: $color-accent-light; }
+            &:nth-child(2) { background: $color-primary-light; }
+            &:nth-child(3) { background: #FDE8D7; }
+        }
+    }
+
+    .gm-rows {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+
+        span {
+            display: block;
+            height: 9px;
+            border-radius: 4px;
+            background: $color-accent;
+
+            &:nth-child(1) { width: 90%; }
+            &:nth-child(2) { width: 70%; }
+            &:nth-child(3) { width: 50%; }
+        }
+    }
+}
+
+.gallery-swiper-wrap .swiper-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+
+    &.gallery-prev { left: 0; }
+    &.gallery-next { right: 0; }
+}
+
+.gallery-pagination {
+    position: static !important;
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: .4rem;
+
+    .swiper-pagination-bullet {
+        width: 9px;
+        height: 9px;
+        background: $color-border;
+        opacity: 1;
+        margin: 0 !important;
+    }
+
+    .swiper-pagination-bullet-active { background: $color-primary; }
+}
+
+@include media-breakpoint-down(md) {
+    .gallery-swiper-wrap { padding-inline: 0; }
+    .gallery-swiper-wrap .swiper-arrow { display: none; }
+}
+
+// ---- Key features (single strip, matches template) ----
+.feature-strip {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    background: $color-white;
+    border-radius: $radius-md;
+    border: 1px solid $color-border;
+    padding: 1.75rem 1.5rem;
+}
+
+.feature-strip-item {
+    padding: 0 1.1rem;
+    border-right: 1px solid $color-border;
+
+    &:last-child { border-right: 0; }
+
+    i { color: $color-primary; font-size: 1.3rem; margin-bottom: .85rem; display: inline-block; }
+
+    h4 { font-size: .875rem; margin-bottom: .4rem; }
+
+    p { font-size: .75rem; color: $color-text; margin: 0; }
+}
+
+@include media-breakpoint-down(xl) {
+    .feature-strip { grid-template-columns: repeat(3, 1fr); row-gap: 1.5rem; }
+    .feature-strip-item:nth-child(3n) { border-right: 0; }
+}
+
+@include media-breakpoint-down(sm) {
+    .feature-strip { grid-template-columns: repeat(1, 1fr); }
+    .feature-strip-item { border-right: 0 !important; border-bottom: 1px solid $color-border; padding-bottom: 1rem; }
+    .feature-strip-item:last-child { border-bottom: 0; padding-bottom: 0; }
+}
+
+// ---- Technologies + Results ----
+.tech-results-panel {
+    height: 100%;
+    padding: 1.75rem;
+    border-radius: $radius-md;
+    border: 1px solid $color-border;
+    background: $color-white;
+
+    h4 { font-size: 1.05rem; margin-bottom: 1.25rem; }
+}
+
+.tech-chip-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .75rem;
+}
+
+.tech-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .75rem .9rem;
+    border-radius: $radius-sm;
+    border: 1px solid $color-border;
+    background: $color-bg;
+    font-weight: 600;
+    font-size: .8rem;
+    color: $color-heading;
+
+    i { color: $color-primary; }
+}
+
+.results-heading {
+    font-size: 1.05rem;
+    margin-bottom: 1.25rem;
+}
+
+.result-stat-icon {
+    @include flex-center;
+    width: 44px;
+    height: 44px;
+    margin: 0 auto .85rem;
+    border-radius: 50%;
+    background: $color-accent-light;
+    color: $color-accent-dark;
+    font-size: 1.1rem;
+}
+
+.result-stat-card {
+    text-align: center;
+    padding: 1.5rem 1rem;
+    border-radius: $radius-md;
+    border: 1px solid $color-border;
+    background: $color-white;
+
+    strong {
+        display: block;
+        font-family: $font-heading;
+        font-size: clamp(1.4rem, 2vw, 1.75rem);
+        color: $color-heading;
+    }
+
+    span { font-size: .78rem; color: $color-text; }
+}
+
+// ---- Project testimonial (dark) ----
+.testimonial-card-dark {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 2rem;
+    justify-content: space-between;
+    padding: clamp(1.75rem, 3vw, 2.75rem);
+    border-radius: $radius-lg;
+    background: linear-gradient(150deg, $color-primary, #0B2620 130%);
+    color: $color-white;
+
+    .quote-mark {
+        flex-shrink: 0;
+        @include flex-center;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, .12);
+        color: $color-accent;
+        font-size: 1.3rem;
+    }
+
+    .testimonial-content {
+        flex: 1 1 420px;
+        display: flex;
+        align-items: center;
+        gap: 1.25rem;
+
+        blockquote {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, .92);
+            margin: 0;
+        }
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+        gap: .85rem;
+        flex-shrink: 0;
+
+        .avatar-initials {
+            background: rgba(255, 255, 255, .12);
+            color: $color-white;
+        }
+
+        strong { display: block; font-size: .95rem; color: $color-white; }
+        span { font-size: .8rem; color: rgba(255, 255, 255, .65); }
+
+        .rating {
+            color: $color-accent;
+            font-size: .75rem;
+            margin-top: .25rem;
+        }
+    }
+}
+
+@include media-breakpoint-down(md) {
+    .overview-meta-grid { grid-template-columns: 1fr; }
+
+    .overview-meta-col:first-child {
+        border-right: 0;
+        padding-right: 0;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid $color-border;
+        margin-bottom: 1.25rem;
+    }
+
+    .tech-chip-grid { grid-template-columns: 1fr; }
+}

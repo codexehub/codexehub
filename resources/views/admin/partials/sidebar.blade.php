@@ -1,10 +1,11 @@
 @php
     $adminNav = [
         ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => 'bi-speedometer2'],
+        ['route' => 'admin.consultations.index', 'active' => 'admin.consultations.*', 'label' => 'Consultation Requests', 'icon' => 'bi-calendar2-check'],
         ['route' => 'admin.users.index', 'label' => 'User Management', 'icon' => 'bi-people-fill'],
         ['route' => 'admin.roles', 'label' => 'Role & Permission Management', 'icon' => 'bi-shield-lock-fill'],
         ['route' => 'admin.content', 'label' => 'Content Management', 'icon' => 'bi-file-earmark-richtext-fill'],
-        ['route' => 'admin.services', 'label' => 'Service Management', 'icon' => 'bi-grid-fill'],
+        ['route' => 'admin.services.index', 'active' => 'admin.services.*', 'label' => 'Service Management', 'icon' => 'bi-grid-fill'],
         ['route' => 'admin.portfolio.index', 'active' => 'admin.portfolio.*', 'label' => 'Portfolio Management', 'icon' => 'bi-briefcase-fill'],
         ['route' => 'admin.blog', 'label' => 'Blog Management', 'icon' => 'bi-journal-richtext'],
         ['route' => 'admin.settings', 'label' => 'Settings', 'icon' => 'bi-gear-fill'],

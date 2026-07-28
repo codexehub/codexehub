@@ -22,7 +22,7 @@
             ],
         ],
     ];
-    $servicesBase = request()->routeIs('home') ? '' : route('home');
+    $servicesBase = request()->routeIs('services') ? '' : route('services');
 @endphp
 <header class="site-header">
     <nav class="navbar navbar-expand-lg h-100">
@@ -42,7 +42,7 @@
                         <a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a>
                     </li>
                     <li class="nav-item dropdown mega-menu-item position-static">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('services') ? 'active' : '' }}" href="{{ route('services') }}" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                             Services <i class="bi bi-chevron-down mega-caret"></i>
                         </a>
                         <div class="dropdown-menu mega-menu">
@@ -74,7 +74,8 @@
                                         <div class="mega-menu-cta">
                                             <span class="mega-menu-group-title">Not sure where to start?</span>
                                             <p>Tell us about your project and we&rsquo;ll map the right team and stack.</p>
-                                            <a href="{{ $servicesBase }}#footer-contact" class="btn btn-primary btn-sm">Get Free Consultation <i class="bi bi-arrow-right"></i></a>
+                                            <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#consultationModal">Get Free Consultation <i class="bi bi-arrow-right"></i></button>
+                                            <a href="{{ route('services') }}" class="btn-link-arrow">View All Services <i class="bi bi-arrow-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -83,13 +84,13 @@
                     </li>
                     {{-- <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#projects' : route('home').'#projects' }}">Projects</a></li> --}}
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('portfolio') ? 'active' : '' }}" href="{{ route('portfolio') }}">Portfolio</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#core-values' : route('home').'#core-values' }}">About Us</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#footer-contact' : route('home').'#footer-contact' }}">Contact Us</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a></li>
+                    <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a></li>
                 </ul>
             </div>
 
             <div class="nav-cta d-none d-lg-flex">
-                <a href="{{ request()->routeIs('home') ? '#footer-contact' : route('home').'#footer-contact' }}" class="btn btn-primary">Get Free Consultation <i class="bi bi-arrow-right"></i></a>
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#consultationModal">Get Free Consultation <i class="bi bi-arrow-right"></i></button>
             </div>
         </div>
     </nav>
@@ -102,13 +103,13 @@
         <div class="offcanvas-body">
             <ul class="navbar-nav">
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#services' : route('home').'#services' }}">Services</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('services') ? 'active' : '' }}" href="{{ route('services') }}">Services</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#projects' : route('home').'#projects' }}">Projects</a></li>
                 <li class="nav-item"><a class="nav-link {{ request()->routeIs('portfolio') ? 'active' : '' }}" href="{{ route('portfolio') }}">Portfolio</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#core-values' : route('home').'#core-values' }}">About Us</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#footer-contact' : route('home').'#footer-contact' }}">Contact Us</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a></li>
+                <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a></li>
             </ul>
-            <a href="{{ request()->routeIs('home') ? '#footer-contact' : route('home').'#footer-contact' }}" class="btn btn-primary w-100 mt-3">Get Free Consultation <i class="bi bi-arrow-right"></i></a>
+            <button type="button" class="btn btn-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#consultationModal" data-bs-dismiss="offcanvas">Get Free Consultation <i class="bi bi-arrow-right"></i></button>
         </div>
     </div>
 </header>

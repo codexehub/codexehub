@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Portfolio extends Model
 {
@@ -14,13 +15,17 @@ class Portfolio extends Model
 
     protected $fillable = [
         'category_id', 'title', 'slug', 'short_description', 'description',
-        'client_name', 'project_url', 'github_url', 'featured', 'status', 'sort_order',
+        'client_name', 'industry', 'location', 'duration', 'team_size', 'completed_date',
+        'challenge', 'solution',
+        'project_url', 'github_url', 'case_study_file', 'featured', 'status', 'sort_order',
+        'testimonial_quote', 'testimonial_name', 'testimonial_role', 'testimonial_rating', 'testimonial_avatar',
     ];
 
     protected function casts(): array
     {
         return [
             'featured' => 'boolean',
+            'completed_date' => 'date',
         ];
     }
 
@@ -42,6 +47,16 @@ class Portfolio extends Model
     public function technologies(): HasMany
     {
         return $this->hasMany(PortfolioTechnology::class);
+    }
+
+    public function highlights(): HasMany
+    {
+        return $this->hasMany(PortfolioHighlight::class)->orderBy('sort_order');
+    }
+
+    public function results(): HasMany
+    {
+        return $this->hasMany(PortfolioResult::class)->orderBy('sort_order');
     }
 
     public function scopeActive(Builder $query): Builder
@@ -81,5 +96,15 @@ class Portfolio extends Model
     public function getGalleryImagesAttribute()
     {
         return $this->images->where('type', 'gallery');
+    }
+
+    public function getCaseStudyFileUrlAttribute(): ?string
+    {
+        return $this->case_study_file ? Storage::disk('public')->url($this->case_study_file) : null;
+    }
+
+    public function getTestimonialAvatarUrlAttribute(): ?string
+    {
+        return $this->testimonial_avatar ? Storage::disk('public')->url($this->testimonial_avatar) : null;
     }
 }

@@ -17,11 +17,6 @@ class PlaceholderController extends Controller
         return $this->render('Content Management', 'Manage site pages and reusable content blocks.');
     }
 
-    public function services(): View
-    {
-        return $this->render('Service Management', 'Manage the services listed on the public site.');
-    }
-
     public function blog(): View
     {
         return $this->render('Blog Management', 'Publish and manage blog articles.');

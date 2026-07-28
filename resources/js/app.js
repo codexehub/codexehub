@@ -12,15 +12,21 @@ import 'glightbox/dist/css/glightbox.css';
 import { initHeader } from './modules/header';
 import { initHeroSlider } from './modules/hero-slider';
 import { initTestimonialsSlider } from './modules/testimonials-slider';
+import { initTeamSlider } from './modules/team-slider';
+import { initGallerySlider } from './modules/gallery-slider';
 import { initAos } from './modules/aos-init';
 import { initLightbox } from './modules/lightbox-init';
 import { initPortfolioFilter } from './modules/portfolio-filter';
+import { initConsultationModal } from './modules/consultation-modal';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHeader();
     initHeroSlider();
     initTestimonialsSlider();
+    initTeamSlider();
+    initGallerySlider();
     initAos();
     initLightbox();
     initPortfolioFilter();
+    initConsultationModal();
 });

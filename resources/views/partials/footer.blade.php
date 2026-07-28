@@ -18,23 +18,23 @@
                 <h6>Quick Links</h6>
                 <ul class="footer-links">
                     <li><a href="{{ route('home') }}">Home</a></li>
-                    <li><a href="{{ route('home') }}">About Us</a></li>
-                    <li><a href="{{ request()->routeIs('home') ? '#services' : route('home').'#services' }}">Services</a></li>
+                    <li><a href="{{ route('about') }}">About Us</a></li>
+                    <li><a href="{{ route('services') }}">Services</a></li>
                     <li><a href="{{ request()->routeIs('home') ? '#projects' : route('home').'#projects' }}">Projects</a></li>
                     <li><a href="{{ route('portfolio') }}">Portfolio</a></li>
-                    <li><a href="{{ request()->routeIs('home') ? '#footer-contact' : route('home').'#footer-contact' }}">Contact Us</a></li>
+                    <li><a href="{{ route('contact') }}">Contact Us</a></li>
                 </ul>
             </div>
 
             <div class="col-6 col-lg-2">
                 <h6>Services</h6>
                 <ul class="footer-links">
-                    <li><a href="#services">Web Development</a></li>
-                    <li><a href="#services">Mobile App Development</a></li>
-                    <li><a href="#services">AI &amp; Automation</a></li>
-                    <li><a href="#services">UI/UX Design</a></li>
-                    <li><a href="#services">Cloud &amp; DevOps</a></li>
-                    <li><a href="#services">Maintenance &amp; Support</a></li>
+                    <li><a href="{{ route('services') }}#service-web-development">Web Development</a></li>
+                    <li><a href="{{ route('services') }}#service-mobile-apps">Mobile App Development</a></li>
+                    <li><a href="{{ route('services') }}#service-ai-automation">AI &amp; Automation</a></li>
+                    <li><a href="{{ route('services') }}#service-ui-ux-design">UI/UX Design</a></li>
+                    <li><a href="{{ route('services') }}#service-cloud-devops">Cloud &amp; DevOps</a></li>
+                    <li><a href="{{ route('services') }}#service-maintenance-support">Maintenance &amp; Support</a></li>
                 </ul>
             </div>
 

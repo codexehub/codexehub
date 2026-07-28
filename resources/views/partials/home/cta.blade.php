@@ -8,7 +8,7 @@
                     <p class="mb-0">Let's discuss your ideas and build something amazing together.</p>
                 </div>
             </div>
-            <a href="{{ request()->routeIs('home') ? '#footer-contact' : route('home').'#footer-contact' }}" class="btn btn-accent btn-lg flex-shrink-0">Get Free Consultation <i class="bi bi-arrow-right"></i></a>
+            <button type="button" class="btn btn-accent btn-lg flex-shrink-0" data-bs-toggle="modal" data-bs-target="#consultationModal">Get Free Consultation <i class="bi bi-arrow-right"></i></button>
         </div>
     </div>
 </section>

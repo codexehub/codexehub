@@ -72,6 +72,27 @@ function initTagInputs() {
     });
 }
 
+function initRepeaters() {
+    document.querySelectorAll('[data-repeater-add]').forEach((button) => {
+        button.addEventListener('click', () => {
+            const key = button.dataset.repeaterAdd;
+            const container = document.querySelector(`[data-repeater="${key}"]`);
+            const template = document.querySelector(`template[data-repeater-template="${key}"]`);
+
+            if (!container || !template) return;
+
+            container.appendChild(template.content.cloneNode(true));
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        const removeButton = event.target.closest('[data-repeater-remove]');
+        if (!removeButton) return;
+
+        removeButton.closest('[data-repeater-row]')?.remove();
+    });
+}
+
 function initSelectAll() {
     document.querySelectorAll('[data-select-all]').forEach((checkbox) => {
         checkbox.addEventListener('change', () => {
@@ -134,5 +155,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initTooltips();
     initCharts();
     initTagInputs();
+    initRepeaters();
     initSelectAll();
 });
