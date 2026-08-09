@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Service;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
@@ -40,13 +41,18 @@ class ServiceController extends Controller
     {
         $validated = $this->validateService($request);
 
-        Service::create($validated);
+        $service = Service::create($validated);
+
+        $this->syncFeatures($service, $request);
+        $this->handleUpload($service, $request);
 
         return redirect()->route('admin.services.index')->with('status', 'Service created successfully.');
     }
 
     public function edit(Service $service): View
     {
+        $service->load('features');
+
         return view('admin.pages.services.edit', compact('service'));
     }
 
@@ -56,11 +62,18 @@ class ServiceController extends Controller
 
         $service->update($validated);
 
+        $this->syncFeatures($service, $request);
+        $this->handleUpload($service, $request);
+
         return redirect()->route('admin.services.index')->with('status', 'Service updated successfully.');
     }
 
     public function destroy(Service $service): RedirectResponse
     {
+        if ($service->image) {
+            Storage::disk('public')->delete($service->image);
+        }
+
         $service->delete();
 
         return back()->with('status', 'Service deleted successfully.');
@@ -87,14 +100,54 @@ class ServiceController extends Controller
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('services', 'slug')->ignore($service?->id)],
             'short_description' => ['required', 'string', 'max:500'],
+            'description' => ['nullable', 'string'],
             'status' => ['required', Rule::in(['active', 'inactive'])],
             'sort_order' => ['nullable', 'integer'],
+            'image' => ['nullable', 'image', 'max:2048'],
+            'features_icon' => ['nullable', 'array'],
+            'features_icon.*' => ['nullable', 'string', 'max:100'],
+            'features_text' => ['nullable', 'array'],
+            'features_text.*' => ['nullable', 'string', 'max:255'],
         ]);
 
         $validated['featured'] = $request->boolean('featured');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
         $validated['slug'] = $validated['slug'] ? Str::slug($validated['slug']) : null;
 
+        unset($validated['image'], $validated['features_icon'], $validated['features_text']);
+
         return $validated;
+    }
+
+    private function syncFeatures(Service $service, Request $request): void
+    {
+        $icons = $request->input('features_icon', []);
+        $texts = $request->input('features_text', []);
+
+        $service->features()->delete();
+
+        foreach ($texts as $index => $text) {
+            $text = trim((string) $text);
+
+            if ($text === '') {
+                continue;
+            }
+
+            $service->features()->create([
+                'icon' => trim((string) ($icons[$index] ?? '')) ?: 'bi-check-circle',
+                'text' => $text,
+                'sort_order' => $index,
+            ]);
+        }
+    }
+
+    private function handleUpload(Service $service, Request $request): void
+    {
+        if ($request->hasFile('image')) {
+            if ($service->image) {
+                Storage::disk('public')->delete($service->image);
+            }
+            $service->update(['image' => $request->file('image')->store('services', 'public')]);
+        }
     }
 }

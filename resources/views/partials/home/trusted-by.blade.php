@@ -1,4 +1,4 @@
-<section class="section-sm" id="trusted-by">
+{{-- <section class="section-sm" id="trusted-by">
     <div class="container-xxl">
         <p class="text-center text-primary fw-bold text-uppercase small mb-4" style="letter-spacing:.06em;">Trusted by businesses worldwide</p>
 
@@ -10,4 +10,4 @@
             @endforeach
         </div>
     </div>
-</section>
+</section> --}}

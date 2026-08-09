@@ -14,10 +14,17 @@
             @foreach ($coreServices as $i => $service)
                 <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ $i * 60 }}">
                     <div class="service-card" id="service-{{ $service->slug }}">
-                        <div class="icon-tile"><i class="bi {{ $service->icon }}"></i></div>
-                        <h3>{{ $service->title }}</h3>
-                        <p>{{ $service->short_description }}</p>
-                        <a href="#footer-contact" class="btn-link-arrow">Learn More <i class="bi bi-arrow-right"></i></a>
+                        @if ($service->image_url)
+                            <div class="service-thumb"><img src="{{ $service->image_url }}" alt="{{ $service->title }}"></div>
+                        @endif
+                        <div class="service-card-body">
+                            @unless ($service->image_url)
+                                <div class="icon-tile"><i class="bi {{ $service->icon }}"></i></div>
+                            @endunless
+                            <h3>{{ $service->title }}</h3>
+                            <p>{{ $service->short_description }}</p>
+                            <a href="{{ route('services.show', $service) }}" class="btn-link-arrow">Learn More <i class="bi bi-arrow-right"></i></a>
+                        </div>
                     </div>
                 </div>
             @endforeach

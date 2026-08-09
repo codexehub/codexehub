@@ -2,15 +2,15 @@
 
 use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\PortfolioController;
+use App\Http\Controllers\ServiceController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('pages.home');
 })->name('home');
 
-Route::get('/services', function () {
-    return view('pages.services');
-})->name('services');
+Route::get('/services', [ServiceController::class, 'index'])->name('services');
+Route::get('/services/{service}', [ServiceController::class, 'show'])->name('services.show');
 
 Route::get('/about-us', function () {
     return view('pages.about');

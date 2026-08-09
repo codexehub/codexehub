@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Consultation;
 use App\Models\Service;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -63,7 +64,11 @@ class DashboardController extends Controller
 
         $months = collect(range(0, 5))->map(fn ($i) => now()->subMonths(5 - $i)->format('M'));
 
-        $registrations = User::selectRaw("strftime('%Y-%m', created_at) as ym, count(*) as total")
+        $dateExpr = DB::connection()->getDriverName() === 'sqlite'
+            ? "strftime('%Y-%m', created_at)"
+            : "DATE_FORMAT(created_at, '%Y-%m')";
+
+        $registrations = User::selectRaw("{$dateExpr} as ym, count(*) as total")
             ->where('created_at', '>=', now()->subMonths(5)->startOfMonth())
             ->groupBy('ym')
             ->pluck('total', 'ym');

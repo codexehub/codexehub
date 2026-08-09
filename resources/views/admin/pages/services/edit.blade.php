@@ -7,7 +7,7 @@
     </div>
 
     <div class="admin-panel admin-panel--narrow">
-        <form method="POST" action="{{ route('admin.services.update', $service) }}">
+        <form method="POST" action="{{ route('admin.services.update', $service) }}" enctype="multipart/form-data">
             @include('admin.pages.services._form')
         </form>
     </div>

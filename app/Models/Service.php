@@ -5,13 +5,15 @@ namespace App\Models;
 use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Storage;
 
 class Service extends Model
 {
     use HasUniqueSlug;
 
     protected $fillable = [
-        'icon', 'title', 'slug', 'short_description', 'status', 'featured', 'sort_order',
+        'icon', 'image', 'title', 'slug', 'short_description', 'description', 'status', 'featured', 'sort_order',
     ];
 
     protected function casts(): array
@@ -26,6 +28,11 @@ class Service extends Model
         return 'slug';
     }
 
+    public function features(): HasMany
+    {
+        return $this->hasMany(ServiceFeature::class)->orderBy('sort_order');
+    }
+
     public function scopeActive(Builder $query): Builder
     {
         return $query->where('status', 'active');
@@ -34,5 +41,10 @@ class Service extends Model
     public function scopeFeatured(Builder $query): Builder
     {
         return $query->where('featured', true);
+    }
+
+    public function getImageUrlAttribute(): ?string
+    {
+        return $this->image ? Storage::disk('public')->url($this->image) : null;
     }
 }

@@ -1,3 +1,9 @@
+@php
+    $featureRows = collect(old('features_text'))->isNotEmpty()
+        ? collect(old('features_text'))->map(fn ($text, $i) => ['icon' => old('features_icon')[$i] ?? '', 'text' => $text])
+        : ($service->relationLoaded('features') ? $service->features->map(fn ($f) => ['icon' => $f->icon, 'text' => $f->text]) : collect());
+@endphp
+
 @csrf
 @if ($service->exists)
     @method('PUT')
@@ -37,6 +43,51 @@
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
     </div>
+
+    <div class="col-md-12">
+        <label for="description" class="form-label">Full Description</label>
+        <textarea name="description" id="description" rows="6" class="form-control @error('description') is-invalid @enderror" placeholder="Used on the service details page.">{{ old('description', $service->description) }}</textarea>
+        @error('description')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+    </div>
+
+    <div class="col-md-12">
+        <label for="image" class="form-label">Service Image</label>
+        @if ($service->exists && $service->image_url)
+            <div class="mb-2"><img src="{{ $service->image_url }}" alt="" style="max-width:160px;border-radius:8px;"></div>
+        @endif
+        <input type="file" name="image" id="image" class="form-control @error('image') is-invalid @enderror" accept="image/*">
+        @error('image')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+        <small class="text-secondary">Shown on the service details page hero (falls back to the icon if not set).</small>
+    </div>
+
+    <div class="col-md-12">
+        <hr class="admin-form-divider">
+        <h5 class="mb-3">What's Included</h5>
+
+        <div data-repeater="features">
+            @foreach ($featureRows as $row)
+                <div class="admin-repeater-row d-flex gap-2 mb-2" data-repeater-row>
+                    <input type="text" name="features_icon[]" value="{{ $row['icon'] }}" class="form-control" style="max-width:160px;" placeholder="bi-check-circle">
+                    <input type="text" name="features_text[]" value="{{ $row['text'] }}" class="form-control" placeholder="Feature text">
+                    <button type="button" class="btn btn-outline-danger" data-repeater-remove aria-label="Remove feature">&times;</button>
+                </div>
+            @endforeach
+        </div>
+        <template data-repeater-template="features">
+            <div class="admin-repeater-row d-flex gap-2 mb-2" data-repeater-row>
+                <input type="text" name="features_icon[]" class="form-control" style="max-width:160px;" placeholder="bi-check-circle">
+                <input type="text" name="features_text[]" class="form-control" placeholder="Feature text">
+                <button type="button" class="btn btn-outline-danger" data-repeater-remove aria-label="Remove feature">&times;</button>
+            </div>
+        </template>
+        <button type="button" class="btn btn-sm btn-outline-primary mt-1" data-repeater-add="features">+ Add Feature</button>
+    </div>
+
+    <div class="col-md-12"><hr class="admin-form-divider"></div>
 
     <div class="col-md-6">
         <label for="status" class="form-label">Status</label>
