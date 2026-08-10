@@ -11,11 +11,10 @@
             ] as $i => $value)
                 <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ $i * 60 }}">
                     <div class="value-card">
+                        <span class="value-index">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
                         <div class="icon-tile icon-circle"><i class="bi {{ $value['icon'] }}"></i></div>
-                        <div>
-                            <h3>{{ $value['title'] }}</h3>
-                            <p>{{ $value['desc'] }}</p>
-                        </div>
+                        <h3>{{ $value['title'] }}</h3>
+                        <p>{{ $value['desc'] }}</p>
                     </div>
                 </div>
             @endforeach

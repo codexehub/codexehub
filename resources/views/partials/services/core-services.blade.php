@@ -14,6 +14,9 @@
             @foreach ($coreServices as $i => $service)
                 <div class="col-md-6 col-lg-3" data-aos="fade-up" data-aos-delay="{{ $i * 60 }}">
                     <div class="service-card" id="service-{{ $service->slug }}">
+                        @unless ($service->image_url)
+                            <span class="service-index">{{ str_pad($i + 1, 2, '0', STR_PAD_LEFT) }}</span>
+                        @endunless
                         @if ($service->image_url)
                             <div class="service-thumb"><img src="{{ $service->image_url }}" alt="{{ $service->title }}"></div>
                         @endif

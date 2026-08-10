@@ -14,10 +14,12 @@ import { initHeroSlider } from './modules/hero-slider';
 import { initTestimonialsSlider } from './modules/testimonials-slider';
 import { initTeamSlider } from './modules/team-slider';
 import { initGallerySlider } from './modules/gallery-slider';
+import { initRecentWorkSlider } from './modules/recent-work-slider';
 import { initAos } from './modules/aos-init';
 import { initLightbox } from './modules/lightbox-init';
 import { initPortfolioFilter } from './modules/portfolio-filter';
 import { initConsultationModal } from './modules/consultation-modal';
+import { initProcessTimeline } from './modules/process-timeline';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHeader();
@@ -25,8 +27,10 @@ document.addEventListener('DOMContentLoaded', () => {
     initTestimonialsSlider();
     initTeamSlider();
     initGallerySlider();
+    initRecentWorkSlider();
     initAos();
     initLightbox();
     initPortfolioFilter();
     initConsultationModal();
+    initProcessTimeline();
 });

@@ -15,7 +15,7 @@
                 ['icon' => 'bi-cloud-arrow-up', 'title' => 'Deployment', 'desc' => 'We deploy your solution to the live environment.'],
                 ['icon' => 'bi-headset', 'title' => 'Support', 'desc' => 'We provide ongoing support and maintenance.'],
             ] as $i => $step)
-                <div class="process-step" data-aos="fade-up" data-aos-delay="{{ $i * 60 }}">
+                <div class="process-step">
                     <div class="step-icon"><i class="bi {{ $step['icon'] }}"></i></div>
                     <span class="step-number">{{ sprintf('%02d', $i + 1) }}</span>
                     <h4>{{ $step['title'] }}</h4>

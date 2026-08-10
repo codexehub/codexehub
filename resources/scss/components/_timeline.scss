@@ -10,6 +10,18 @@
         max-width: 220px;
         text-align: center;
         position: relative;
+        opacity: 0;
+        transform: translateY(28px);
+        transition: opacity .6s ease, transform .6s ease;
+
+        // Staggered reveal as the section scrolls into view.
+        @for $i from 1 through 10 {
+            &:nth-child(#{$i}) {
+                transition-delay: #{($i - 1) * .12}s;
+
+                .step-icon { animation-delay: #{($i - 1) * .12}s; }
+            }
+        }
 
         .step-icon {
             @include flex-center;
@@ -23,6 +35,17 @@
             font-size: 1.4rem;
             position: relative;
             z-index: 1;
+            cursor: pointer;
+            transition: background-color .3s ease, border-color .3s ease,
+                        color .3s ease, transform .3s ease, box-shadow .3s ease;
+
+            &:hover {
+                background: $color-primary;
+                border-color: $color-primary;
+                color: $color-white;
+                transform: scale(1.12);
+                box-shadow: 0 10px 22px rgba($color-primary, .3);
+            }
         }
 
         .step-number {
@@ -37,6 +60,32 @@
         h4 { font-size: .95rem; margin-bottom: .4rem; }
 
         p { font-size: .8rem; color: $color-text; margin: 0; }
+    }
+
+    &.is-visible .process-step {
+        opacity: 1;
+        transform: translateY(0);
+
+        .step-icon { animation: step-icon-in .5s cubic-bezier(.34, 1.56, .64, 1) both; }
+    }
+}
+
+@keyframes step-icon-in {
+    from { transform: scale(.4); }
+    to { transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .process-timeline .process-step {
+        opacity: 1;
+        transform: none;
+        transition: none;
+
+        .step-icon { transition: none; }
+    }
+
+    .process-timeline.is-visible .process-step .step-icon {
+        animation: none;
     }
 }
 

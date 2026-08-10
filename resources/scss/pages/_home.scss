@@ -1,1 +1,74 @@
 // Homepage-specific overrides
+
+// Services teaser — tinted band with a faint dot-grid texture
+.services-textured {
+    position: relative;
+    overflow: hidden;
+
+    &::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: radial-gradient(rgba($color-primary, .14) 1px, transparent 1px);
+        background-size: 22px 22px;
+        mask-image: radial-gradient(ellipse 75% 85% at 50% 0%, #000 40%, transparent 75%);
+        -webkit-mask-image: radial-gradient(ellipse 75% 85% at 50% 0%, #000 40%, transparent 75%);
+        pointer-events: none;
+    }
+
+    .container-xxl {
+        position: relative;
+        z-index: 1;
+    }
+}
+
+// Featured projects — carousel wrapping the col-lg-9 grid slot
+.recent-work-swiper-wrap {
+    position: relative;
+    padding-inline: clamp(0px, 3vw, 48px);
+}
+
+.recent-work-swiper {
+    overflow: visible;
+    padding-bottom: .25rem;
+
+    .swiper-slide { height: auto; }
+}
+
+.recent-work-swiper-wrap .swiper-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+
+    &.swiper-button-disabled {
+        opacity: .35;
+        pointer-events: none;
+    }
+
+    &.recent-work-prev { left: 0; }
+    &.recent-work-next { right: 0; }
+}
+
+.recent-work-pagination {
+    position: static !important;
+    display: flex;
+    justify-content: center;
+    gap: .4rem;
+    margin-top: 2rem;
+
+    .swiper-pagination-bullet {
+        width: 9px;
+        height: 9px;
+        background: $color-border;
+        opacity: 1;
+        margin: 0 !important;
+    }
+
+    .swiper-pagination-bullet-active { background: $color-primary; }
+}
+
+@include media-breakpoint-down(md) {
+    .recent-work-swiper-wrap { padding-inline: 0; }
+    .recent-work-swiper-wrap .swiper-arrow { display: none; }
+}
