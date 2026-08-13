@@ -82,6 +82,31 @@
                             </div>
                         </div>
                     </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ request()->routeIs('products.*') ? 'active' : '' }}" href="{{ route('products.software') }}" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Products <i class="bi bi-chevron-down mega-caret"></i>
+                        </a>
+                        <ul class="dropdown-menu products-menu">
+                            <li>
+                                <a class="dropdown-item {{ request()->routeIs('products.software') || request()->routeIs('products.show') ? 'is-active' : '' }}" href="{{ route('products.software') }}">
+                                    <span class="icon-tile icon-tile-sm"><i class="bi bi-window-stack"></i></span>
+                                    <span class="products-menu-text">
+                                        <strong>Software Products</strong>
+                                        <small>ERP, POS, HR &amp; SaaS platforms ready to deploy.</small>
+                                    </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item {{ request()->routeIs('products.physical') ? 'is-active' : '' }}" href="{{ route('products.physical') }}">
+                                    <span class="icon-tile icon-tile-sm"><i class="bi bi-cpu"></i></span>
+                                    <span class="products-menu-text">
+                                        <strong>Hardware Products <em class="products-menu-soon">Coming soon</em></strong>
+                                        <small>Hardware &amp; equipment, with inventory to follow.</small>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                     {{-- <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#projects' : route('home').'#projects' }}">Projects</a></li> --}}
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('portfolio') ? 'active' : '' }}" href="{{ route('portfolio') }}">Portfolio</a></li>
                     <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a></li>
@@ -94,22 +119,30 @@
             </div>
         </div>
     </nav>
-
-    <div class="offcanvas offcanvas-end" tabindex="-1" id="mobileNav">
-        <div class="offcanvas-header">
-            <span class="navbar-brand mb-0"><i class="bi bi-braces-asterisk"></i> Codexe<span>Hub</span></span>
-            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-            <ul class="navbar-nav">
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('services') ? 'active' : '' }}" href="{{ route('services') }}">Services</a></li>
-                <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#projects' : route('home').'#projects' }}">Projects</a></li>
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('portfolio') ? 'active' : '' }}" href="{{ route('portfolio') }}">Portfolio</a></li>
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a></li>
-                <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a></li>
-            </ul>
-            <button type="button" class="btn btn-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#consultationModal" data-bs-dismiss="offcanvas">Get Free Consultation <i class="bi bi-arrow-right"></i></button>
-        </div>
-    </div>
 </header>
+
+{{-- Kept outside .site-header on purpose: that element's `backdrop-filter` creates a
+     containing block for fixed-position descendants, which would size this drawer
+     against the 84px header instead of the viewport. --}}
+<div class="offcanvas offcanvas-end mobile-nav" tabindex="-1" id="mobileNav" aria-labelledby="mobileNavLabel">
+    <div class="offcanvas-header">
+        <span class="navbar-brand mb-0" id="mobileNavLabel"><i class="bi bi-braces-asterisk"></i> Codexe<span>Hub</span></span>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <ul class="navbar-nav">
+            <li class="nav-item"><a class="nav-link {{ request()->routeIs('home') ? 'active' : '' }}" href="{{ route('home') }}">Home</a></li>
+            <li class="nav-item"><a class="nav-link {{ request()->routeIs('services') ? 'active' : '' }}" href="{{ route('services') }}">Services</a></li>
+            <li class="nav-item"><a class="nav-link {{ request()->routeIs('products.software') || request()->routeIs('products.show') ? 'active' : '' }}" href="{{ route('products.software') }}">Software Products</a></li>
+            <li class="nav-item"><a class="nav-link {{ request()->routeIs('products.physical') ? 'active' : '' }}" href="{{ route('products.physical') }}">Hardware Products</a></li>
+            <li class="nav-item"><a class="nav-link" href="{{ request()->routeIs('home') ? '#projects' : route('home').'#projects' }}">Projects</a></li>
+            <li class="nav-item"><a class="nav-link {{ request()->routeIs('portfolio') ? 'active' : '' }}" href="{{ route('portfolio') }}">Portfolio</a></li>
+            <li class="nav-item"><a class="nav-link {{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">About Us</a></li>
+            <li class="nav-item"><a class="nav-link {{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact Us</a></li>
+        </ul>
+        {{-- No data-bs-dismiss here: Bootstrap's dismiss handler reads the same
+             data-bs-target and would try to dismiss the modal as an offcanvas.
+             The drawer is closed by the show.bs.modal handler in js/modules/header.js. --}}
+        <button type="button" class="btn btn-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#consultationModal">Get Free Consultation <i class="bi bi-arrow-right"></i></button>
+    </div>
+</div>

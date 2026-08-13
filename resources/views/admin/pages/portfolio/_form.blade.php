@@ -110,11 +110,9 @@
                         @foreach ($portfolio->images->where('type', 'gallery') as $image)
                             <div class="text-center">
                                 <img src="{{ $image->url }}" alt="" style="width:100px;height:75px;object-fit:cover;border-radius:6px;">
-                                <form method="POST" action="{{ route('admin.portfolio.images.destroy', $image) }}" onsubmit="return confirm('Remove this image?')" class="mt-1">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
-                                </form>
+                                {{-- The delete form itself lives outside this one (see edit.blade.php);
+                                     forms can't nest, so it's targeted here by id. --}}
+                                <button type="submit" form="delete-portfolio-image-{{ $image->id }}" class="btn btn-sm btn-outline-danger mt-1">Remove</button>
                             </div>
                         @endforeach
                     </div>

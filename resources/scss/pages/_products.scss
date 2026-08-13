@@ -1,0 +1,162 @@
+// ==========================================================================
+// Products (software catalogue + product details)
+// ==========================================================================
+
+// ---- Header "Products" dropdown ----
+// A plain Bootstrap dropdown rather than the full-width `.mega-menu`, since
+// there are only two entries. Shares the mega menu's link anatomy.
+.products-menu {
+    min-width: 340px;
+    padding: .6rem;
+    border: none;
+    border-radius: $radius-md;
+    box-shadow: $shadow-soft-lg;
+
+    .dropdown-item {
+        display: flex;
+        align-items: flex-start;
+        gap: .75rem;
+        padding: .7rem;
+        border-radius: $radius-sm;
+        white-space: normal;
+        @include transition(background-color);
+
+        &:hover,
+        &:focus,
+        &.is-active {
+            background: $color-primary-tint;
+
+            .products-menu-text strong { color: $color-primary-dark; }
+        }
+    }
+
+    .icon-tile-sm {
+        width: 42px;
+        height: 42px;
+        border-radius: $radius-sm - 4px;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+    }
+
+    .products-menu-text {
+        strong {
+            display: block;
+            font-size: .9rem;
+            font-weight: 700;
+            color: $color-heading;
+        }
+
+        small {
+            display: block;
+            font-size: .78rem;
+            color: $color-text;
+            line-height: 1.4;
+        }
+    }
+
+    .products-menu-soon {
+        display: inline-block;
+        margin-left: .4rem;
+        padding: .1rem .45rem;
+        border-radius: $radius-lg;
+        background: $color-accent-light;
+        color: $color-accent-dark;
+        font-size: .62rem;
+        font-style: normal;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .04em;
+        vertical-align: middle;
+    }
+}
+
+// ---- Category filter pills ----
+// Mirrors `.portfolio-filters`, but these are real links (server-side filtering)
+// rather than the JS-driven buttons the portfolio grid uses.
+.product-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: .6rem;
+
+    a {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        padding: .6rem 1.2rem;
+        border-radius: $radius-lg;
+        border: 1px solid $color-border;
+        background: $color-white;
+        font-size: .85rem;
+        font-weight: 600;
+        color: $color-text;
+        text-decoration: none;
+        @include transition(background-color color border-color);
+
+        &:hover { border-color: $color-primary; color: $color-primary; }
+
+        &.is-active {
+            background: $color-primary;
+            border-color: $color-primary;
+            color: $color-white;
+        }
+    }
+}
+
+// ---- Price row on the product card ----
+.product-price-row {
+    display: flex;
+    align-items: baseline;
+    gap: .6rem;
+    margin-bottom: 1rem;
+}
+
+.product-price {
+    font-family: $font-heading;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: $color-primary;
+}
+
+.product-version {
+    font-size: .75rem;
+    font-weight: 600;
+    color: $color-text;
+}
+
+// ---- Product details hero meta ----
+.product-hero-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .6rem 1.5rem;
+    margin-top: 1.25rem;
+
+    span {
+        display: inline-flex;
+        align-items: center;
+        gap: .5rem;
+        font-size: .85rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, .85);
+    }
+
+    i { color: $color-accent; }
+}
+
+// ---- Hardware "coming soon" placeholder ----
+.product-coming-soon {
+    max-width: 720px;
+    margin-inline: auto;
+    padding: clamp(2rem, 5vw, 3.5rem);
+    border-radius: $radius-md;
+    background: $color-bg;
+    border: 1px solid $color-border;
+
+    .icon-tile {
+        width: 72px;
+        height: 72px;
+        font-size: 1.9rem;
+    }
+
+    p { max-width: 56ch; }
+}

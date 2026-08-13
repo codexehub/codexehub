@@ -155,10 +155,23 @@
     &:focus { box-shadow: 0 0 0 3px $color-primary-light; }
 }
 
-.offcanvas {
+.mobile-nav {
+    max-width: 100%;
+
     .nav-link {
         color: $color-heading;
         padding-block: .65rem;
         border-bottom: 1px solid $color-border;
+        @include transition(color);
+
+        &:hover,
+        &:focus,
+        &.active {
+            color: $color-primary;
+        }
+
+        &.active { font-weight: 600; }
     }
+
+    .nav-item:last-child .nav-link { border-bottom: 0; }
 }

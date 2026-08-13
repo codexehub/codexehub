@@ -20,6 +20,7 @@
                     <li><a href="{{ route('home') }}">Home</a></li>
                     <li><a href="{{ route('about') }}">About Us</a></li>
                     <li><a href="{{ route('services') }}">Services</a></li>
+                    <li><a href="{{ route('products.software') }}">Software Products</a></li>
                     <li><a href="{{ request()->routeIs('home') ? '#projects' : route('home').'#projects' }}">Projects</a></li>
                     <li><a href="{{ route('portfolio') }}">Portfolio</a></li>
                     <li><a href="{{ route('contact') }}">Contact Us</a></li>

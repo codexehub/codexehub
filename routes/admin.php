@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\PlaceholderController;
 use App\Http\Controllers\Admin\PortfolioCategoryController;
 use App\Http\Controllers\Admin\PortfolioController;
 use App\Http\Controllers\Admin\PortfolioSettingController;
+use App\Http\Controllers\Admin\ProductCategoryController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\UserController;
@@ -58,6 +60,29 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('{service}', [ServiceController::class, 'destroy'])->name('destroy');
             Route::patch('{service}/status', [ServiceController::class, 'updateStatus'])->name('status');
             Route::patch('{service}/featured', [ServiceController::class, 'toggleFeatured'])->name('featured');
+        });
+
+        Route::prefix('products')->name('products.')->group(function () {
+            Route::get('/', [ProductController::class, 'index'])->name('index');
+            Route::get('create', [ProductController::class, 'create'])->name('create');
+            Route::post('/', [ProductController::class, 'store'])->name('store');
+            Route::delete('images/{image}', [ProductController::class, 'deleteImage'])->name('images.destroy');
+
+            Route::prefix('categories')->name('categories.')->group(function () {
+                Route::get('/', [ProductCategoryController::class, 'index'])->name('index');
+                Route::post('/', [ProductCategoryController::class, 'store'])->name('store');
+                Route::get('{category}/edit', [ProductCategoryController::class, 'edit'])->name('edit');
+                Route::put('{category}', [ProductCategoryController::class, 'update'])->name('update');
+                Route::delete('{category}', [ProductCategoryController::class, 'destroy'])->name('destroy');
+            });
+
+            // Wildcard {product} routes must come last so they don't swallow the
+            // static 'create', 'images' and 'categories' paths above.
+            Route::get('{product}/edit', [ProductController::class, 'edit'])->name('edit');
+            Route::put('{product}', [ProductController::class, 'update'])->name('update');
+            Route::delete('{product}', [ProductController::class, 'destroy'])->name('destroy');
+            Route::patch('{product}/status', [ProductController::class, 'updateStatus'])->name('status');
+            Route::patch('{product}/featured', [ProductController::class, 'toggleFeatured'])->name('featured');
         });
 
         Route::prefix('portfolio')->name('portfolio.')->group(function () {

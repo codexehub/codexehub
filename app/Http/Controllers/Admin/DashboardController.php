@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Consultation;
+use App\Models\Product;
 use App\Models\Service;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
@@ -16,6 +17,7 @@ class DashboardController extends Controller
         $totalUsers = User::count();
         $totalServices = Service::count();
         $totalConsultations = Consultation::count();
+        $totalProducts = Product::count();
 
         $stats = [
             [
@@ -36,6 +38,13 @@ class DashboardController extends Controller
                 'label' => 'Total Services',
                 'value' => number_format($totalServices),
                 'icon' => 'bi-grid-fill',
+                'change' => '0%',
+                'trend' => 'flat',
+            ],
+            [
+                'label' => 'Total Products',
+                'value' => number_format($totalProducts),
+                'icon' => 'bi-box-seam',
                 'change' => '0%',
                 'trend' => 'flat',
             ],

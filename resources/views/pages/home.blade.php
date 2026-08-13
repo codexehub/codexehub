@@ -5,6 +5,7 @@
     @include('partials.home.core-values')
     @include('partials.home.trusted-by')
     @include('partials.home.services')
+    @include('partials.home.products')
     @include('partials.home.featured-projects')
     @include('partials.home.process')
     @include('partials.home.testimonials')
