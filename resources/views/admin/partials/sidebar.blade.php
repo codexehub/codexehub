@@ -4,7 +4,7 @@
         ['route' => 'admin.consultations.index', 'active' => 'admin.consultations.*', 'label' => 'Consultation Requests', 'icon' => 'bi-calendar2-check'],
         ['route' => 'admin.users.index', 'label' => 'User Management', 'icon' => 'bi-people-fill'],
         ['route' => 'admin.roles', 'label' => 'Role & Permission Management', 'icon' => 'bi-shield-lock-fill'],
-        ['route' => 'admin.content', 'label' => 'Content Management', 'icon' => 'bi-file-earmark-richtext-fill'],
+        ['route' => 'admin.team.index', 'active' => 'admin.team.*', 'label' => 'Content Management', 'icon' => 'bi-file-earmark-richtext-fill'],
         ['route' => 'admin.services.index', 'active' => 'admin.services.*', 'label' => 'Service Management', 'icon' => 'bi-grid-fill'],
         ['route' => 'admin.products.index', 'active' => 'admin.products.*', 'label' => 'Product Management', 'icon' => 'bi-box-seam'],
         ['route' => 'admin.portfolio.index', 'active' => 'admin.portfolio.*', 'label' => 'Portfolio Management', 'icon' => 'bi-briefcase-fill'],

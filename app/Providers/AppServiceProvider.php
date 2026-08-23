@@ -30,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
         // records without touching the controllers that already check them.
         foreach (['view', 'create', 'edit', 'delete'] as $ability) {
             Gate::define("product.{$ability}", fn (User $user) => $user->isAdmin());
+            Gate::define("team.{$ability}", fn (User $user) => $user->isAdmin());
         }
 
         ResetPassword::createUrlUsing(function ($notifiable, string $token) {

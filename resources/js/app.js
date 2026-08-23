@@ -20,6 +20,8 @@ import { initLightbox } from './modules/lightbox-init';
 import { initPortfolioFilter } from './modules/portfolio-filter';
 import { initConsultationModal } from './modules/consultation-modal';
 import { initProcessTimeline } from './modules/process-timeline';
+import { initContactForm } from './modules/contact-form';
+import { initTeamModal } from './modules/team-modal';
 
 document.addEventListener('DOMContentLoaded', () => {
     initHeader();
@@ -33,4 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initPortfolioFilter();
     initConsultationModal();
     initProcessTimeline();
+    initContactForm();
+    initTeamModal();
 });

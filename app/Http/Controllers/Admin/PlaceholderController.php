@@ -12,11 +12,6 @@ class PlaceholderController extends Controller
         return $this->render('Role & Permission Management', 'Define admin roles and fine-grained permissions.');
     }
 
-    public function content(): View
-    {
-        return $this->render('Content Management', 'Manage site pages and reusable content blocks.');
-    }
-
     public function blog(): View
     {
         return $this->render('Blog Management', 'Publish and manage blog articles.');

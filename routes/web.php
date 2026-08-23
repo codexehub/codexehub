@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\AboutController;
 use App\Http\Controllers\ConsultationController;
+use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
@@ -19,16 +21,13 @@ Route::get('/products/software', [ProductController::class, 'software'])->name('
 Route::get('/products/hardware', [ProductController::class, 'physical'])->name('products.physical');
 Route::get('/products/{product}', [ProductController::class, 'show'])->name('products.show');
 
-Route::get('/about-us', function () {
-    return view('pages.about');
-})->name('about');
+Route::get('/about-us', [AboutController::class, 'index'])->name('about');
 
 Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio');
 Route::get('/portfolio/{portfolio}', [PortfolioController::class, 'show'])->name('portfolio.show');
 
-Route::get('/contact', function () {
-    return view('pages.contact');
-})->name('contact');
+Route::get('/contact', [ContactController::class, 'index'])->name('contact');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 Route::post('/consultation', [ConsultationController::class, 'store'])->name('consultation.store');
 

@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -49,7 +50,20 @@ Route::prefix('admin')->name('admin.')->group(function () {
         });
 
         Route::get('roles', [PlaceholderController::class, 'roles'])->name('roles');
-        Route::get('content', [PlaceholderController::class, 'content'])->name('content');
+
+        Route::prefix('team')->name('team.')->group(function () {
+            Route::get('/', [TeamController::class, 'index'])->name('index');
+            Route::get('create', [TeamController::class, 'create'])->name('create');
+            Route::post('/', [TeamController::class, 'store'])->name('store');
+            Route::delete('images/{image}', [TeamController::class, 'deleteImage'])->name('images.destroy');
+
+            // Wildcard {team} routes must come last so they don't swallow the
+            // static 'create' and 'images' paths above.
+            Route::get('{team}/edit', [TeamController::class, 'edit'])->name('edit');
+            Route::put('{team}', [TeamController::class, 'update'])->name('update');
+            Route::delete('{team}', [TeamController::class, 'destroy'])->name('destroy');
+            Route::patch('{team}/status', [TeamController::class, 'updateStatus'])->name('status');
+        });
 
         Route::prefix('services')->name('services.')->group(function () {
             Route::get('/', [ServiceController::class, 'index'])->name('index');
