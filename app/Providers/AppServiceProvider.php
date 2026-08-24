@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use App\Models\User;
+use App\Services\Payments\ManualBkashPaymentProvider;
+use App\Services\Payments\PaymentProvider;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -15,7 +17,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(PaymentProvider::class, ManualBkashPaymentProvider::class);
     }
 
     /**
@@ -31,6 +33,7 @@ class AppServiceProvider extends ServiceProvider
         foreach (['view', 'create', 'edit', 'delete'] as $ability) {
             Gate::define("product.{$ability}", fn (User $user) => $user->isAdmin());
             Gate::define("team.{$ability}", fn (User $user) => $user->isAdmin());
+            Gate::define("licensing.{$ability}", fn (User $user) => $user->isAdmin());
         }
 
         ResetPassword::createUrlUsing(function ($notifiable, string $token) {

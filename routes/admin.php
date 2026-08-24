@@ -5,6 +5,11 @@ use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\ConsultationController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\Licensing\LicensedAppController;
+use App\Http\Controllers\Admin\Licensing\LicensedAppPackageController;
+use App\Http\Controllers\Admin\Licensing\LicenseController as LicensingLicenseController;
+use App\Http\Controllers\Admin\Licensing\LicenseCustomerController;
+use App\Http\Controllers\Admin\Licensing\LicenseTransactionController;
 use App\Http\Controllers\Admin\PlaceholderController;
 use App\Http\Controllers\Admin\PortfolioCategoryController;
 use App\Http\Controllers\Admin\PortfolioController;
@@ -130,5 +135,21 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('blog', [PlaceholderController::class, 'blog'])->name('blog');
         Route::get('settings', [PlaceholderController::class, 'settings'])->name('settings');
         Route::get('reports', [PlaceholderController::class, 'reports'])->name('reports');
+
+        Route::prefix('licensing')->name('licensing.')->group(function () {
+            Route::resource('apps', LicensedAppController::class)->except('show');
+            Route::resource('packages', LicensedAppPackageController::class)->except('show');
+            Route::resource('customers', LicenseCustomerController::class)->except('show');
+            Route::resource('licenses', LicensingLicenseController::class)->except('destroy');
+
+            Route::post('licenses/{license}/suspend', [LicensingLicenseController::class, 'suspend'])->name('licenses.suspend');
+            Route::post('licenses/{license}/reactivate', [LicensingLicenseController::class, 'reactivate'])->name('licenses.reactivate');
+            Route::post('licenses/{license}/revoke', [LicensingLicenseController::class, 'revoke'])->name('licenses.revoke');
+
+            Route::get('transactions', [LicenseTransactionController::class, 'index'])->name('transactions.index');
+            Route::post('licenses/{license}/transactions', [LicenseTransactionController::class, 'store'])->name('transactions.store');
+            Route::post('transactions/{transaction}/approve', [LicenseTransactionController::class, 'approve'])->name('transactions.approve');
+            Route::post('transactions/{transaction}/reject', [LicenseTransactionController::class, 'reject'])->name('transactions.reject');
+        });
     });
 });

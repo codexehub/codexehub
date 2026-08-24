@@ -7,6 +7,7 @@
         ['route' => 'admin.team.index', 'active' => 'admin.team.*', 'label' => 'Content Management', 'icon' => 'bi-file-earmark-richtext-fill'],
         ['route' => 'admin.services.index', 'active' => 'admin.services.*', 'label' => 'Service Management', 'icon' => 'bi-grid-fill'],
         ['route' => 'admin.products.index', 'active' => 'admin.products.*', 'label' => 'Product Management', 'icon' => 'bi-box-seam'],
+        ['route' => 'admin.licensing.licenses.index', 'active' => 'admin.licensing.*', 'label' => 'Licensing', 'icon' => 'bi-key-fill'],
         ['route' => 'admin.portfolio.index', 'active' => 'admin.portfolio.*', 'label' => 'Portfolio Management', 'icon' => 'bi-briefcase-fill'],
         ['route' => 'admin.blog', 'label' => 'Blog Management', 'icon' => 'bi-journal-richtext'],
         ['route' => 'admin.settings', 'label' => 'Settings', 'icon' => 'bi-gear-fill'],
