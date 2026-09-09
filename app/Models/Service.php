@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -10,7 +11,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Service extends Model
 {
-    use HasUniqueSlug;
+    use Auditable, HasUniqueSlug;
 
     protected $fillable = [
         'icon', 'image', 'title', 'slug', 'short_description', 'description', 'status', 'featured', 'sort_order',

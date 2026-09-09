@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Storage;
 
 class Portfolio extends Model
 {
-    use HasUniqueSlug;
+    use Auditable, HasUniqueSlug;
 
     protected $fillable = [
         'category_id', 'title', 'slug', 'short_description', 'description',

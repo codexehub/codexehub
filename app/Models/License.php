@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,6 +10,8 @@ use Illuminate\Support\Str;
 
 class License extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'license_key', 'license_customer_id', 'licensed_app_id', 'licensed_app_package_id',
         'status', 'expires_at', 'last_verified_at', 'notes',
@@ -38,6 +41,18 @@ class License extends Model
         } while (static::where('license_key', $key)->exists());
 
         return $key;
+    }
+
+    /**
+     * `last_verified_at` is written on every Vendor-API verify call — auditing it
+     * would bury real lifecycle changes under verification noise. The rest mirror
+     * the Auditable trait default.
+     *
+     * @return list<string>
+     */
+    public function auditExclude(): array
+    {
+        return ['password', 'remember_token', 'created_at', 'updated_at', 'deleted_at', 'last_verified_at'];
     }
 
     public function customer(): BelongsTo

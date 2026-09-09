@@ -2,9 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Role;
 use App\Models\User;
+use App\Services\Audit\AuditLogger;
 use App\Services\Payments\ManualBkashPaymentProvider;
 use App\Services\Payments\PaymentProvider;
+use App\Support\Authorization\PermissionCatalog;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Gate;
@@ -18,6 +21,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->bind(PaymentProvider::class, ManualBkashPaymentProvider::class);
+        $this->app->singleton(AuditLogger::class);
     }
 
     /**
@@ -27,13 +31,15 @@ class AppServiceProvider extends ServiceProvider
     {
         Blade::anonymousComponentPath(resource_path('views/admin/components'), 'admin');
 
-        // Module abilities. These resolve through the admin role for now; when the
-        // Role & Permission module lands they can be re-pointed at real permission
-        // records without touching the controllers that already check them.
-        foreach (['view', 'create', 'edit', 'delete'] as $ability) {
-            Gate::define("product.{$ability}", fn (User $user) => $user->isAdmin());
-            Gate::define("team.{$ability}", fn (User $user) => $user->isAdmin());
-            Gate::define("licensing.{$ability}", fn (User $user) => $user->isAdmin());
+        // A super-admin passes every gate, even one defined for a permission added
+        // after the seeder last ran.
+        Gate::before(fn (User $user, string $ability) => $user->hasRole(Role::SUPER_ADMIN) ? true : null);
+
+        // Every ability — control-plane and the folded-in legacy modules — is
+        // defined from the catalog and resolved against the user's roles (RBAC-001
+        // / RBAC-003). The catalog may list a key before the module that checks it.
+        foreach (PermissionCatalog::all() as $permission) {
+            Gate::define($permission, fn (User $user) => $user->hasPermissionTo($permission));
         }
 
         ResetPassword::createUrlUsing(function ($notifiable, string $token) {

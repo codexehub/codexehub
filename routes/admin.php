@@ -1,14 +1,16 @@
 <?php
 
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Admin\Auth\NewPasswordController;
 use App\Http\Controllers\Admin\Auth\PasswordResetLinkController;
 use App\Http\Controllers\Admin\ConsultationController;
+use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FeatureController;
+use App\Http\Controllers\Admin\Licensing\LicenseController as LicensingLicenseController;
 use App\Http\Controllers\Admin\Licensing\LicensedAppController;
 use App\Http\Controllers\Admin\Licensing\LicensedAppPackageController;
-use App\Http\Controllers\Admin\Licensing\LicenseController as LicensingLicenseController;
-use App\Http\Controllers\Admin\Licensing\LicenseCustomerController;
 use App\Http\Controllers\Admin\Licensing\LicenseTransactionController;
 use App\Http\Controllers\Admin\PlaceholderController;
 use App\Http\Controllers\Admin\PortfolioCategoryController;
@@ -17,6 +19,7 @@ use App\Http\Controllers\Admin\PortfolioSettingController;
 use App\Http\Controllers\Admin\ProductCategoryController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
+use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\TeamController;
 use App\Http\Controllers\Admin\UserController;
@@ -54,7 +57,24 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::delete('{consultation}', [ConsultationController::class, 'destroy'])->name('destroy');
         });
 
-        Route::get('roles', [PlaceholderController::class, 'roles'])->name('roles');
+        Route::prefix('roles')->name('roles.')->group(function () {
+            Route::get('/', [RoleController::class, 'index'])->name('index');
+            Route::get('{role}/edit', [RoleController::class, 'edit'])->name('edit');
+            Route::put('{role}', [RoleController::class, 'update'])->name('update');
+        });
+
+        Route::prefix('customers')->name('customers.')->group(function () {
+            Route::get('/', [CustomerController::class, 'index'])->name('index');
+            Route::get('create', [CustomerController::class, 'create'])->name('create');
+            Route::post('/', [CustomerController::class, 'store'])->name('store');
+
+            // Wildcard {customer} routes last so they don't swallow the static 'create' path.
+            Route::get('{customer}', [CustomerController::class, 'show'])->name('show');
+            Route::get('{customer}/edit', [CustomerController::class, 'edit'])->name('edit');
+            Route::put('{customer}', [CustomerController::class, 'update'])->name('update');
+            Route::delete('{customer}', [CustomerController::class, 'destroy'])->name('destroy');
+            Route::patch('{customer}/status', [CustomerController::class, 'updateStatus'])->name('status');
+        });
 
         Route::prefix('team')->name('team.')->group(function () {
             Route::get('/', [TeamController::class, 'index'])->name('index');
@@ -68,6 +88,18 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('{team}', [TeamController::class, 'update'])->name('update');
             Route::delete('{team}', [TeamController::class, 'destroy'])->name('destroy');
             Route::patch('{team}/status', [TeamController::class, 'updateStatus'])->name('status');
+        });
+
+        Route::prefix('features')->name('features.')->group(function () {
+            Route::get('/', [FeatureController::class, 'index'])->name('index');
+            Route::get('create', [FeatureController::class, 'create'])->name('create');
+            Route::post('/', [FeatureController::class, 'store'])->name('store');
+
+            // Wildcard {feature} routes last so they don't swallow the static 'create' path.
+            Route::get('{feature}/edit', [FeatureController::class, 'edit'])->name('edit');
+            Route::put('{feature}', [FeatureController::class, 'update'])->name('update');
+            Route::delete('{feature}', [FeatureController::class, 'destroy'])->name('destroy');
+            Route::patch('{feature}/status', [FeatureController::class, 'updateStatus'])->name('status');
         });
 
         Route::prefix('services')->name('services.')->group(function () {
@@ -132,14 +164,15 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::patch('{portfolio}/featured', [PortfolioController::class, 'toggleFeatured'])->name('featured');
         });
 
+        Route::get('audit-log', [AuditLogController::class, 'index'])->name('audit.index');
+
         Route::get('blog', [PlaceholderController::class, 'blog'])->name('blog');
         Route::get('settings', [PlaceholderController::class, 'settings'])->name('settings');
         Route::get('reports', [PlaceholderController::class, 'reports'])->name('reports');
 
-        Route::prefix('licensing')->name('licensing.')->group(function () {
+        Route::prefix('licensing')->name('licensing.')->middleware('can:licensing.view')->group(function () {
             Route::resource('apps', LicensedAppController::class)->except('show');
             Route::resource('packages', LicensedAppPackageController::class)->except('show');
-            Route::resource('customers', LicenseCustomerController::class)->except('show');
             Route::resource('licenses', LicensingLicenseController::class)->except('destroy');
 
             Route::post('licenses/{license}/suspend', [LicensingLicenseController::class, 'suspend'])->name('licenses.suspend');

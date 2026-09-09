@@ -2,23 +2,38 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use App\Models\Concerns\HasUniqueSlug;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Storage;
 
+/**
+ * The Codexehub product. One table serves both the public marketing catalogue
+ * and the SRS §52 control-plane product entity (PROD-001 fold-in):
+ *
+ * - `title`     — SRS "name"
+ * - `key`       — stable machine identifier; customer packages, offers, releases
+ *                 and the Vendor API bind to it, never the editable marketing `slug`
+ * - `version` / `status` / `description` — as in SRS §52
+ *
+ * `type` splits software from physical (hardware). Physical-only columns (`sku`,
+ * `stock_qty`, …) arrive with the inventory module; only software is manageable
+ * in the admin today.
+ */
 class Product extends Model
 {
-    use HasUniqueSlug;
+    use Auditable, HasFactory, HasUniqueSlug;
 
     public const TYPE_SOFTWARE = 'software';
 
     public const TYPE_PHYSICAL = 'physical';
 
     protected $fillable = [
-        'type', 'product_category_id', 'icon', 'image', 'title', 'slug', 'tagline',
+        'type', 'product_category_id', 'icon', 'image', 'title', 'slug', 'key', 'tagline',
         'short_description', 'description', 'price', 'price_unit', 'pricing_note',
         'demo_url', 'docs_url', 'version', 'status', 'featured', 'sort_order',
     ];
@@ -29,6 +44,16 @@ class Product extends Model
             'featured' => 'boolean',
             'price' => 'decimal:2',
         ];
+    }
+
+    protected static function booted(): void
+    {
+        // Runs after HasUniqueSlug's own `creating` hook, so `slug` is already set.
+        static::creating(function (Product $product) {
+            if (empty($product->key)) {
+                $product->key = $product->slug;
+            }
+        });
     }
 
     public function getRouteKeyName(): string
@@ -49,6 +74,15 @@ class Product extends Model
     public function images(): HasMany
     {
         return $this->hasMany(ProductImage::class)->orderBy('sort_order');
+    }
+
+    /**
+     * Licensing-domain bridge rows for this product (PROD-001). Usually zero or
+     * one; the Vendor API still issues licenses against a `LicensedApp`.
+     */
+    public function licensedApps(): HasMany
+    {
+        return $this->hasMany(LicensedApp::class);
     }
 
     public function scopeActive(Builder $query): Builder

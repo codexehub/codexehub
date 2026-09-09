@@ -7,11 +7,6 @@ use Illuminate\View\View;
 
 class PlaceholderController extends Controller
 {
-    public function roles(): View
-    {
-        return $this->render('Role & Permission Management', 'Define admin roles and fine-grained permissions.');
-    }
-
     public function blog(): View
     {
         return $this->render('Blog Management', 'Publish and manage blog articles.');

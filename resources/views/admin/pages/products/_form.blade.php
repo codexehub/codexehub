@@ -53,13 +53,22 @@
         @enderror
     </div>
 
-    <div class="col-md-6">
+    <div class="col-md-3">
         <label for="slug" class="form-label">Slug</label>
-        <input type="text" name="slug" id="slug" value="{{ old('slug', $product->slug) }}" class="form-control @error('slug') is-invalid @enderror" placeholder="Auto-generated from the title if left blank">
+        <input type="text" name="slug" id="slug" value="{{ old('slug', $product->slug) }}" class="form-control @error('slug') is-invalid @enderror" placeholder="Auto from title">
         @error('slug')
             <div class="invalid-feedback">{{ $message }}</div>
         @enderror
-        <small class="text-secondary">Used for the public URL <code>/products/{slug}</code>.</small>
+        <small class="text-secondary">Public URL <code>/products/{slug}</code> — safe to change.</small>
+    </div>
+
+    <div class="col-md-3">
+        <label for="key" class="form-label">Control-plane Key</label>
+        <input type="text" name="key" id="key" value="{{ old('key', $product->key) }}" class="form-control @error('key') is-invalid @enderror" placeholder="Auto from slug">
+        @error('key')
+            <div class="invalid-feedback">{{ $message }}</div>
+        @enderror
+        <small class="text-secondary">Stable machine id — packages, offers, releases and the Vendor API bind to this. Change with care.</small>
     </div>
 
     <div class="col-md-12">

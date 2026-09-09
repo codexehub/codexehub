@@ -3,12 +3,15 @@
         ['route' => 'admin.dashboard', 'label' => 'Dashboard', 'icon' => 'bi-speedometer2'],
         ['route' => 'admin.consultations.index', 'active' => 'admin.consultations.*', 'label' => 'Consultation Requests', 'icon' => 'bi-calendar2-check'],
         ['route' => 'admin.users.index', 'label' => 'User Management', 'icon' => 'bi-people-fill'],
-        ['route' => 'admin.roles', 'label' => 'Role & Permission Management', 'icon' => 'bi-shield-lock-fill'],
-        ['route' => 'admin.team.index', 'active' => 'admin.team.*', 'label' => 'Content Management', 'icon' => 'bi-file-earmark-richtext-fill'],
+        ['route' => 'admin.roles.index', 'active' => 'admin.roles.*', 'label' => 'Role & Permission Management', 'icon' => 'bi-shield-lock-fill', 'can' => 'roles.view'],
+        ['route' => 'admin.customers.index', 'active' => 'admin.customers.*', 'label' => 'Customer Management', 'icon' => 'bi-person-vcard-fill', 'can' => 'customers.view'],
+        ['route' => 'admin.team.index', 'active' => 'admin.team.*', 'label' => 'Content Management', 'icon' => 'bi-file-earmark-richtext-fill', 'can' => 'team.view'],
         ['route' => 'admin.services.index', 'active' => 'admin.services.*', 'label' => 'Service Management', 'icon' => 'bi-grid-fill'],
-        ['route' => 'admin.products.index', 'active' => 'admin.products.*', 'label' => 'Product Management', 'icon' => 'bi-box-seam'],
-        ['route' => 'admin.licensing.licenses.index', 'active' => 'admin.licensing.*', 'label' => 'Licensing', 'icon' => 'bi-key-fill'],
+        ['route' => 'admin.products.index', 'active' => 'admin.products.*', 'label' => 'Product Management', 'icon' => 'bi-box-seam', 'can' => 'products.view'],
+        ['route' => 'admin.features.index', 'active' => 'admin.features.*', 'label' => 'Feature Catalog', 'icon' => 'bi-puzzle-fill', 'can' => 'features.view'],
+        ['route' => 'admin.licensing.licenses.index', 'active' => 'admin.licensing.*', 'label' => 'Licensing', 'icon' => 'bi-key-fill', 'can' => 'licensing.view'],
         ['route' => 'admin.portfolio.index', 'active' => 'admin.portfolio.*', 'label' => 'Portfolio Management', 'icon' => 'bi-briefcase-fill'],
+        ['route' => 'admin.audit.index', 'active' => 'admin.audit.*', 'label' => 'Audit Log', 'icon' => 'bi-clock-history', 'can' => 'audit.view'],
         ['route' => 'admin.blog', 'label' => 'Blog Management', 'icon' => 'bi-journal-richtext'],
         ['route' => 'admin.settings', 'label' => 'Settings', 'icon' => 'bi-gear-fill'],
         ['route' => 'admin.reports', 'label' => 'Reports', 'icon' => 'bi-bar-chart-fill'],
@@ -29,12 +32,14 @@
     <nav class="admin-sidebar-nav">
         <ul>
             @foreach ($adminNav as $item)
-                <li>
-                    <a href="{{ route($item['route']) }}" class="{{ request()->routeIs($item['active'] ?? $item['route']) ? 'active' : '' }}" data-bs-toggle="tooltip" title="{{ $item['label'] }}">
-                        <i class="bi {{ $item['icon'] }}"></i>
-                        <span class="admin-nav-label">{{ $item['label'] }}</span>
-                    </a>
-                </li>
+                @if (empty($item['can']) || auth()->user()?->can($item['can']))
+                    <li>
+                        <a href="{{ route($item['route']) }}" class="{{ request()->routeIs($item['active'] ?? $item['route']) ? 'active' : '' }}" data-bs-toggle="tooltip" title="{{ $item['label'] }}">
+                            <i class="bi {{ $item['icon'] }}"></i>
+                            <span class="admin-nav-label">{{ $item['label'] }}</span>
+                        </a>
+                    </li>
+                @endif
             @endforeach
         </ul>
     </nav>

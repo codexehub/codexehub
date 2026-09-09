@@ -19,17 +19,16 @@ use Illuminate\View\View;
 class ProductController extends Controller implements HasMiddleware
 {
     /**
-     * Product abilities are registered as Gates in AppServiceProvider. They all
-     * resolve through the admin role today and will bind to real permission
-     * records once the Role & Permission module lands.
+     * The marketing `products` table is also the SRS §52 control-plane product
+     * (PROD-001), so this screen is gated by the control-plane `products.*`
+     * permissions (PROD-002) — `products.view` to read, `products.manage` for
+     * every write. Package Manager holds both (SRS §105).
      */
     public static function middleware(): array
     {
         return [
-            new Middleware('can:product.view', only: ['index']),
-            new Middleware('can:product.create', only: ['create', 'store']),
-            new Middleware('can:product.edit', only: ['edit', 'update', 'updateStatus', 'toggleFeatured', 'deleteImage']),
-            new Middleware('can:product.delete', only: ['destroy']),
+            new Middleware('can:products.view', only: ['index']),
+            new Middleware('can:products.manage', only: ['create', 'store', 'edit', 'update', 'updateStatus', 'toggleFeatured', 'deleteImage', 'destroy']),
         ];
     }
 
@@ -57,7 +56,7 @@ class ProductController extends Controller implements HasMiddleware
 
     public function create(): View
     {
-        $product = new Product();
+        $product = new Product;
         $categories = ProductCategory::query()->orderBy('sort_order')->get();
 
         return view('admin.pages.products.create', compact('product', 'categories'));
@@ -112,7 +111,7 @@ class ProductController extends Controller implements HasMiddleware
 
     public function deleteImage(ProductImage $image): RedirectResponse
     {
-        Gate::authorize('product.edit');
+        Gate::authorize('products.manage');
 
         Storage::disk('public')->delete($image->path);
         $image->delete();
@@ -136,6 +135,16 @@ class ProductController extends Controller implements HasMiddleware
 
     private function validateProduct(Request $request, ?Product $product = null): array
     {
+        // Normalise the two slug-shaped fields before validation so the `unique`
+        // rules check the value that will actually be stored. A blank key falls
+        // back to the current key (edit) / the slug (create, via the model hook).
+        $request->merge([
+            'slug' => filled($request->input('slug')) ? Str::slug($request->input('slug')) : null,
+            'key' => filled($request->input('key'))
+                ? Str::slug($request->input('key'))
+                : $product?->key,
+        ]);
+
         $validated = $request->validate([
             // Physical products are accepted by the schema but not yet manageable here —
             // they arrive with the inventory module, so the form only offers "software".
@@ -144,6 +153,7 @@ class ProductController extends Controller implements HasMiddleware
             'icon' => ['required', 'string', 'max:100'],
             'title' => ['required', 'string', 'max:255'],
             'slug' => ['nullable', 'string', 'max:255', Rule::unique('products', 'slug')->ignore($product?->id)],
+            'key' => ['nullable', 'string', 'max:255', Rule::unique('products', 'key')->ignore($product?->id)],
             'tagline' => ['nullable', 'string', 'max:255'],
             'short_description' => ['required', 'string', 'max:500'],
             'description' => ['nullable', 'string'],
@@ -166,7 +176,6 @@ class ProductController extends Controller implements HasMiddleware
 
         $validated['featured'] = $request->boolean('featured');
         $validated['sort_order'] = $validated['sort_order'] ?? 0;
-        $validated['slug'] = $validated['slug'] ? Str::slug($validated['slug']) : null;
 
         unset($validated['image'], $validated['screenshots'], $validated['features_icon'], $validated['features_text']);
 

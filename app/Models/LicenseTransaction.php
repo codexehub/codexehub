@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LicenseTransaction extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'license_id', 'method', 'txn_id', 'amount', 'status', 'approved_by', 'approved_at', 'notes',
     ];

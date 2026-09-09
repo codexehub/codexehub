@@ -7,8 +7,8 @@
     </div>
 
     <div class="admin-panel admin-panel--narrow">
-        <form method="POST" action="{{ route('admin.licensing.customers.update', $customer) }}">
-            @include('admin.pages.licensing.customers._form')
+        <form method="POST" action="{{ route('admin.customers.update', $customer) }}">
+            @include('admin.pages.customers._form')
         </form>
     </div>
 @endsection

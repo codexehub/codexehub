@@ -17,10 +17,8 @@ class ProductCategoryController extends Controller implements HasMiddleware
     public static function middleware(): array
     {
         return [
-            new Middleware('can:product.view', only: ['index']),
-            new Middleware('can:product.create', only: ['store']),
-            new Middleware('can:product.edit', only: ['edit', 'update']),
-            new Middleware('can:product.delete', only: ['destroy']),
+            new Middleware('can:products.view', only: ['index']),
+            new Middleware('can:products.manage', only: ['store', 'edit', 'update', 'destroy']),
         ];
     }
 

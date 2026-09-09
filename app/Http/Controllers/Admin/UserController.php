@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Role;
 use App\Models\User;
+use App\Services\Audit\AuditLogger;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -31,20 +33,53 @@ class UserController extends Controller
 
     public function edit(User $user): View
     {
-        return view('admin.pages.users.edit', compact('user'));
+        $user->load('roles');
+
+        return view('admin.pages.users.edit', [
+            'user' => $user,
+            'roles' => Role::orderBy('id')->get(),
+        ]);
     }
 
-    public function update(Request $request, User $user): RedirectResponse
+    public function update(Request $request, User $user, AuditLogger $audit): RedirectResponse
     {
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'email', Rule::unique('users', 'email')->ignore($user->id)],
             'role' => ['required', Rule::in(['admin', 'editor'])],
+            'roles' => ['array'],
+            'roles.*' => [Rule::exists('roles', 'name')],
         ]);
 
-        $user->update($validated);
+        $roles = $validated['roles'] ?? [];
+
+        if ($this->wouldRemoveLastSuperAdmin($user, $roles)) {
+            return back()->withErrors(['roles' => 'You cannot remove the last Super Admin.'])->withInput();
+        }
+
+        $before = $user->roles->pluck('name')->sort()->values()->all();
+
+        $user->update(['name' => $validated['name'], 'email' => $validated['email'], 'role' => $validated['role']]);
+        $user->syncRoles($roles);
+
+        $after = $user->roles()->pluck('name')->sort()->values()->all();
+        if ($before !== $after) {
+            $audit->log('user.roles_updated', $user, ['roles' => $before], ['roles' => $after]);
+        }
 
         return redirect()->route('admin.users.index')->with('status', 'User updated successfully.');
+    }
+
+    /**
+     * @param  list<string>  $newRoleNames
+     */
+    private function wouldRemoveLastSuperAdmin(User $user, array $newRoleNames): bool
+    {
+        if (! $user->hasRole(Role::SUPER_ADMIN) || in_array(Role::SUPER_ADMIN, $newRoleNames, true)) {
+            return false;
+        }
+
+        return Role::where('name', Role::SUPER_ADMIN)->first()?->users()->count() === 1;
     }
 
     public function destroy(Request $request, User $user): RedirectResponse

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\Auditable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class LicensedAppPackage extends Model
 {
+    use Auditable;
+
     protected $fillable = [
         'licensed_app_id', 'name', 'price', 'duration_days', 'max_activations', 'features', 'is_active',
     ];

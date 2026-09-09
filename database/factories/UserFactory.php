@@ -30,6 +30,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
             'remember_token' => Str::random(10),
+            'role' => 'admin',
         ];
     }
 
@@ -41,5 +42,25 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /**
+     * A signed-in user who is not an admin (fails EnsureUserIsAdmin).
+     * The RBAC module (RBAC-001) replaces this string role with real roles.
+     */
+    public function nonAdmin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => 'user',
+        ]);
+    }
+
+    /**
+     * Attach the user to one or more seeded RBAC roles after creation.
+     * The roles must already exist — seed RolePermissionSeeder first.
+     */
+    public function asRole(string ...$roles): static
+    {
+        return $this->afterCreating(fn (User $user) => $user->assignRole(...$roles));
     }
 }

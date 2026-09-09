@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call(AdminUserSeeder::class);
+        $this->call(RolePermissionSeeder::class);
         $this->call(PortfolioSeeder::class);
         $this->call(ServiceSeeder::class);
         $this->call(ProductSeeder::class);

@@ -14,6 +14,7 @@ class ProductSeeder extends Seeder
     public function run(): void
     {
         $categories = [
+            ['slug' => 'ecommerce', 'name' => 'E-Commerce'],
             ['slug' => 'erp-solutions', 'name' => 'ERP Solutions'],
             ['slug' => 'pos-retail', 'name' => 'POS & Retail'],
             ['slug' => 'saas-tools', 'name' => 'SaaS Tools'],
@@ -34,6 +35,32 @@ class ProductSeeder extends Seeder
         $categoryIds = ProductCategory::query()->pluck('id', 'slug');
 
         $products = [
+            [
+                // SRS §6 — the first control-plane product. Its `key` is fixed
+                // (`ecommerce`); the licensing bridge (`ecommerce-laravel`
+                // licensed app) links to it in LicensingSeeder.
+                'slug' => 'codexecommerce',
+                'key' => 'ecommerce',
+                'category' => 'ecommerce',
+                'icon' => 'bi-bag-check',
+                'title' => 'CodexeCommerce',
+                'tagline' => 'A full storefront, checkout and admin in one Laravel app',
+                'short_description' => 'The Codexehub e-commerce platform — storefront, cart, checkout, order management and a merchant admin, licensed per customer.',
+                'description' => "CodexeCommerce is the reusable storefront product every customer deployment is built from. It ships with a catalogue, cart, multi-step checkout, coupon engine, order and shipment management and a full merchant admin, and every capability beyond the core is a Codexehub feature that is switched on per customer package.\n\nPayment gateways, couriers, SEO, analytics and the rest are entitlements synced from the control plane, so a customer's installation always matches what they have paid for.",
+                'price' => 49,
+                'price_unit' => 'per month',
+                'pricing_note' => 'From. Customer-specific packages are priced individually.',
+                'version' => '1.0.0',
+                'featured' => false,
+                'features' => [
+                    ['bi-shop', 'Storefront, catalogue and product search'],
+                    ['bi-cart', 'Cart, multi-step checkout and guest orders'],
+                    ['bi-ticket-perforated', 'Coupon and discount engine'],
+                    ['bi-box-seam', 'Order, shipment and return management'],
+                    ['bi-toggles', 'Per-customer feature entitlements synced from Codexehub'],
+                    ['bi-speedometer2', 'Merchant admin dashboard and reports'],
+                ],
+            ],
             [
                 'slug' => 'codexe-erp',
                 'category' => 'erp-solutions',
@@ -129,6 +156,7 @@ class ProductSeeder extends Seeder
                 ['slug' => $data['slug']],
                 [
                     'type' => Product::TYPE_SOFTWARE,
+                    'key' => $data['key'] ?? $data['slug'],
                     'product_category_id' => $categoryIds[$data['category']] ?? null,
                     'icon' => $data['icon'],
                     'title' => $data['title'],
