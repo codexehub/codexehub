@@ -28,8 +28,9 @@
             @forelse ($licenses as $license)
                 @php
                     $badge = match ($license->status) {
-                        'active' => 'success',
-                        'pending' => 'warning',
+                        'active', 'completed' => 'success',
+                        'pending', 'payment_due' => 'warning',
+                        'grace_period', 'reactivated' => 'info',
                         'suspended' => 'secondary',
                         'expired' => 'dark',
                         'revoked' => 'danger',
@@ -41,7 +42,7 @@
                     <td>{{ $license->customer->name }}</td>
                     <td>{{ $license->licensedApp->name }}</td>
                     <td>{{ $license->package->name }}</td>
-                    <td><span class="admin-badge admin-badge--{{ $badge }}">{{ ucfirst($license->status) }}</span></td>
+                    <td><span class="admin-badge admin-badge--{{ $badge }}">{{ ucwords(str_replace('_', ' ', $license->status)) }}</span></td>
                     <td>{{ optional($license->expires_at)->format('Y-m-d') ?? '-' }}</td>
                     <td>
                         <div class="admin-table-actions">

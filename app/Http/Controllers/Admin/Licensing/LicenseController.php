@@ -7,12 +7,17 @@ use App\Models\Customer;
 use App\Models\License;
 use App\Models\LicenseCustomer;
 use App\Models\LicensedApp;
+use App\Services\License\LicenseLifecycle;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use InvalidArgumentException;
 
 class LicenseController extends Controller
 {
+    public function __construct(private LicenseLifecycle $lifecycle) {}
+
     public function index(): View
     {
         return view('admin.pages.licensing.licenses.index', [
@@ -38,7 +43,7 @@ class LicenseController extends Controller
             'notes' => ['nullable', 'string'],
         ]);
         $data['license_customer_id'] = $this->resolveLicenseCustomer($data['customer_id'])->id;
-        $data['status'] = 'pending';
+        $data['status'] = License::STATUS_PENDING;
         unset($data['customer_id']);
 
         $license = License::create($data);
@@ -50,7 +55,10 @@ class LicenseController extends Controller
     {
         $license->load('customer', 'licensedApp', 'package', 'activations', 'transactions.approver');
 
-        return view('admin.pages.licensing.licenses.show', ['license' => $license]);
+        return view('admin.pages.licensing.licenses.show', [
+            'license' => $license,
+            'nextStatuses' => $this->lifecycle->transitions($license->status),
+        ]);
     }
 
     public function edit(License $license): View
@@ -98,9 +106,7 @@ class LicenseController extends Controller
 
     public function suspend(License $license): RedirectResponse
     {
-        $license->update(['status' => 'suspended']);
-
-        return back()->with('status', 'License suspended. It will stop working on its next check-in.');
+        return $this->applyTransition($license, License::STATUS_SUSPENDED, 'License suspended. It will stop working on its next check-in.');
     }
 
     public function reactivate(License $license): RedirectResponse
@@ -109,15 +115,37 @@ class LicenseController extends Controller
             return back()->withErrors(['status' => 'Cannot reactivate: license has no valid (future) expiry. Approve a new payment instead.']);
         }
 
-        $license->update(['status' => 'active']);
-
-        return back()->with('status', 'License reactivated.');
+        return $this->applyTransition($license, License::STATUS_ACTIVE, 'License reactivated.');
     }
 
     public function revoke(License $license): RedirectResponse
     {
-        $license->update(['status' => 'revoked']);
+        return $this->applyTransition($license, License::STATUS_REVOKED, 'License permanently revoked.');
+    }
 
-        return back()->with('status', 'License permanently revoked.');
+    /**
+     * Manual admin move to any SRS §39 state the current status can legally
+     * reach (PAYMENT_DUE / GRACE_PERIOD / REACTIVATED / COMPLETED included) —
+     * the automatic state-machine job that drives most of these normally
+     * arrives with LIC-001.
+     */
+    public function updateStatus(Request $request, License $license): RedirectResponse
+    {
+        $data = $request->validate([
+            'status' => ['required', 'string', Rule::in(License::STATUSES)],
+        ]);
+
+        return $this->applyTransition($license, $data['status'], "License moved to {$data['status']}.");
+    }
+
+    private function applyTransition(License $license, string $to, string $successMessage): RedirectResponse
+    {
+        try {
+            $this->lifecycle->transition($license, $to);
+        } catch (InvalidArgumentException $e) {
+            return back()->withErrors(['status' => $e->getMessage()]);
+        }
+
+        return back()->with('status', $successMessage);
     }
 }

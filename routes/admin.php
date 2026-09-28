@@ -178,6 +178,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::post('licenses/{license}/suspend', [LicensingLicenseController::class, 'suspend'])->name('licenses.suspend');
             Route::post('licenses/{license}/reactivate', [LicensingLicenseController::class, 'reactivate'])->name('licenses.reactivate');
             Route::post('licenses/{license}/revoke', [LicensingLicenseController::class, 'revoke'])->name('licenses.revoke');
+            Route::patch('licenses/{license}/status', [LicensingLicenseController::class, 'updateStatus'])->name('licenses.status');
 
             Route::get('transactions', [LicenseTransactionController::class, 'index'])->name('transactions.index');
             Route::post('licenses/{license}/transactions', [LicenseTransactionController::class, 'store'])->name('transactions.store');

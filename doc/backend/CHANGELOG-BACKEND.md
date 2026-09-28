@@ -43,6 +43,112 @@ for the current task's detail and `CLAUDE.md` for the running narrative.
   `ExampleTest`s; `UserFactory` `role` default + `nonAdmin()` state; `UserTest`, `AdminAccessTest`,
   `SmokeTest` (7 public pages on empty DB). `php artisan test` → 12 passed.
 
+## Phase 6 — Vendor Client & Sync
+
+- 2026-09-28 — **INST-002** — `POST /installations/{register,verify,heartbeat}` +
+  `GET /installations/{id}` on `/api/vendor/v1`. New `App\Services\Installation\InstallationBinder`
+  (reuses `VendorLicenseResolver` for license lookup — WORK-INSTRUCTIONS §8). `register()`
+  creates/updates the `installations` row and (re)binds `licenses.installation_id`; a first-time
+  registration is ACTIVE, a domain change on an existing installation is accepted but flips status to
+  `PENDING` (SRS §38 "requires authorization/revalidation") until `/verify` confirms it back to
+  `ACTIVE`. `/heartbeat` deliberately never changes status, even from `PENDING`, so a liveness ping
+  alone can't complete a revalidation. Two new conflict guards (a license already bound elsewhere; an
+  installation identity already bound to a different customer) → new business error
+  `INSTALLATION_ALREADY_BOUND` (409); a new `INSTALLATION_SUSPENDED` (403) blocks verify/heartbeat for
+  a suspended installation. `GET /installations/{id}` is self-lookup only (`{id}` must equal the
+  caller's own envelope `installation_id`) with a plain string route param, not implicit route-model
+  -binding, so a 404 stays in the standard error envelope. **Recorded decision:** real
+  per-installation signing credentials (assumed by earlier tasks' comments) are deliberately deferred —
+  a materially bigger, separable security change than this task's actual scope; the shared
+  `VENDOR_API_SIGNING_SECRET` is unchanged. `doc/backend/API-CONTRACT.md` gained a full "Installations"
+  section. +30 tests (`Unit/Installation/InstallationBinderTest` 12,
+  `Feature/Api/Vendor/Installation/*` 18; suite 291). No migration. Verified end-to-end against a live
+  `artisan serve` + the real MySQL dev DB with genuinely signed requests and real RSA-signed responses.
+- 2026-09-28 — **INST-001** — SRS §57 `installations` table (schema + model only; `INST-002` builds
+  the register/verify/heartbeat endpoints). Migration `2026_09_09_000009` creates `installations`
+  (`customer_id`/`product_id` real FKs onto `customers`/`products`; `installation_id` unique business
+  key; `domain`, `environment`, `vendor_client_version`, `software_version`, `status`,
+  `last_heartbeat_at`/`last_verified_at`/`last_deployed_at`). SRS's `package_id` reuses the pre-SRS
+  `licensed_app_packages` table as `licensed_app_package_id` (same stand-in `licenses` already uses;
+  `customer_packages` doesn't exist yet — Phase 2). "Supersede `license_activations` additively"
+  decision: `license_activations` stays untouched; the migration backfills its rows into `installations`
+  (verified via `tinker` on the MySQL dev DB, 2 real rows → 2 correctly-populated rows). New
+  `App\Models\Installation` (`Auditable`, `HasFactory`) — `STATUS_*`/`ENVIRONMENT_*` consts,
+  auto-generated collision-checked `installation_id`, relations, scopes, route key = `installation_id`.
+  Registered in `AuditLogController::ENTITY_TYPES`. `licenses.installation_id` deliberately left
+  unbound (that's `INST-002`'s job). +12 tests (`Unit/InstallationTest` 9,
+  `Feature/Foundation/InstallationCatalogTest` 3; suite 261). No new dependency.
+- 2026-09-28 — **LIC-CP-002** — Signed `POST /licenses/{verify,renew,status}` on `/api/vendor/v1`.
+  New `App\Services\License\VendorLicenseResolver` (shared domain service) — `findByKey()` (+ the
+  legacy ACTIVE→EXPIRED staleness safety net, same narrow scope), `businessErrorFor()`/
+  `businessMessageFor()` (`suspended`→`LICENSE_SUSPENDED`, `revoked`→`LICENSE_REVOKED`,
+  `expired`→`LICENSE_EXPIRED`, `pending`→`PAYMENT_DUE` — no dedicated SRS code for "not yet
+  activated", matches the legacy controller's framing), `toSignedPayload()` (SRS §61 shape,
+  deliberately excluding `software_version` [`INST-002`] and package `features` [`SYNC-001`]),
+  `renewIfPaymentRecorded()` (renew-only: PAYMENT_DUE/GRACE_PERIOD → ACTIVE when `next_payment_due`
+  already looks future, ahead of LIC-001's unbuilt scheduled job; never itself records a payment).
+  Three thin controllers (`Verify`/`Status`/`Renew`LicenseController) share one `LicenseKeyRequest`.
+  New `vendor-api.licenses.{verify,renew,status}` routes + `config/vendor_api.php` rate limits
+  (verify/status 30/min, renew 10/min). `GET /licenses/{id}` deliberately not built — outside this
+  task's checklist scope. `doc/backend/API-CONTRACT.md` gained a full "Licenses" section. +24 tests
+  (`Feature/Api/Vendor/License/*`; suite 249). No migration.
+- 2026-09-28 — **APISEC-003** — Response signing + key management/rotation. New
+  `App\Support\VendorApi\VendorApiResponseSigner` — RSA (`openssl_sign`/`openssl_verify`,
+  SHA-256) over the same canonical form `VendorApiSigner` already builds for requests, one shared
+  canonicalization routine both directions. `signature = "{key_id}:" + base64(raw signature)` — the
+  prefix enables rotation via `config('vendor_api.response_signing')`'s `active_key_id` + `keys` map
+  (additive: add a new key, flip `active_key_id`, old entries stay for verification). New
+  `php artisan vendor-api:generate-signing-key` generates an RSA-2048 keypair into
+  `storage/keys/vendor-api/{key-id}-{private,public}.pem` (gitignored). `VendorApiResponse::success()`
+  now signs every response for free; `error()` untouched. Recorded gap: public-key distribution to
+  the Vendor Client is out-of-band/file-based (no SRS fetch endpoint exists yet — revisit with
+  `INST-002`/`VC-001`). Tests use a committed test-only fixture keypair
+  (`tests/fixtures/vendor-api/`), not runtime `openssl_pkey_new()` — that call was found to depend on
+  the host's OpenSSL config discovery in a way a test suite shouldn't. +10 tests
+  (`Unit/Support/VendorApi/VendorApiResponseSignerTest` 6,
+  `Feature/Api/Vendor/VendorApiResponseSigningTest` 4; suite 225). No migration.
+- 2026-09-28 — **LIC-CP-001** — Extended `licenses` to the SRS §59 shape + the full SRS §39 9-state
+  lifecycle. Migration `2026_09_09_000008` adds `installation_id` (plain string, no `installations`
+  table yet), `issued_at`/`starts_at`, `grace_period_days`, `next_payment_due`, `ownership_status`,
+  and widens `status` from a 5-value MySQL enum to a plain indexed string (Laravel 11+ `->change()`,
+  no doctrine/dbal). New `App\Services\License\LicenseLifecycle` transition-graph guard (permissive
+  of the existing manual admin overrides, rejects nonsense moves). Admin suspend/reactivate/revoke
+  route through it; new `PATCH .../licenses/{license}/status` + a "Move to Status" control reach
+  PAYMENT_DUE/GRACE_PERIOD/COMPLETED. Legacy `LicenseApiController` now gates on
+  `License::isOperational()` (SRS §45/§46 — PAYMENT_DUE/GRACE_PERIOD stay usable) instead of a
+  hardcoded `active` check, and echoes the real status. +54 tests (suite 215). No seeder.
+- 2026-09-28 — **APISEC-002** — Request signing + verification, timestamp/replay-window validation,
+  request-id dedupe, per-route rate limiting. New `App\Support\VendorApi\VendorApiSigner`
+  (HMAC-SHA256 over the request body minus `signature`, canonicalized via recursive `ksort` +
+  `json_encode`). Two middleware on every `routes/vendor-api.php` route, ahead of the
+  controller/FormRequest: `ThrottleVendorApiRequest` (rate limit, first) then
+  `VerifyVendorApiSignature` (signature → timestamp freshness → request-id dedupe, in that order).
+  New `config/vendor_api.php` (`signing_secret` — one shared `VENDOR_API_SIGNING_SECRET` today, no
+  per-installation credential until `INST-002`; `replay_window_seconds` 300;
+  `request_id_dedupe_ttl_seconds` 600; `rate_limits` map, `default` 60/60s). 3 new
+  `VendorApiErrorCode` cases (`REQUEST_EXPIRED`/`DUPLICATE_REQUEST`/`RATE_LIMIT_EXCEEDED` — 401/401/429).
+  The security middleware deliberately doesn't duplicate `HasVendorEnvelope`'s shape validation — a
+  request missing a field it needs passes through untouched so the existing 422 `VALIDATION_ERROR`
+  still fires. `doc/backend/API-CONTRACT.md` updated with the exact signing algorithm for the `[VC]`
+  side to mirror. +15 tests (`Unit/Support/VendorApi/VendorApiSignerTest` 6,
+  `Feature/Api/Vendor/VendorApiSecurityTest` 9; suite 161). No migration.
+- 2026-09-28 — **APISEC-001** — Vendor API skeleton `/api/vendor/v1`. New `routes/vendor-api.php`
+  (required from `routes/api.php` under `vendor/v1`; legacy `/api/v1/license/*` untouched).
+  `App\Support\VendorApi\VendorApiErrorCode` (backed enum — SRS §72 business codes
+  `LICENSE_SUSPENDED`/`LICENSE_EXPIRED`/`PAYMENT_DUE`/`LICENSE_REVOKED` vs technical
+  `API_TIMEOUT`/`NETWORK_ERROR`/`INVALID_RESPONSE`/`SERVER_ERROR`/`SIGNATURE_ERROR` +
+  `VALIDATION_ERROR`/`NOT_FOUND`, `classification()`). `App\Support\VendorApi\VendorApiResponse`
+  (SRS §71 success/error envelopes; `signature` always `null` until `APISEC-003`, omitted on error).
+  `App\Http\Requests\VendorApi\VendorApiRequest` + `HasVendorEnvelope` trait validate the SRS §70
+  envelope (shape only, no crypto yet) and render the standard error envelope on failure instead of
+  Laravel's default. `App\Http\Controllers\Api\Vendor\VendorApiController` base + diagnostic
+  `POST /ping`. New `doc/backend/API-CONTRACT.md` (envelope, response shapes, error-code table,
+  endpoint status table, SRS §63 security checklist). Pulled ahead of Phase 1's remaining tasks on
+  user instruction — see `PROJECT-STATUS.md` Known Issues (deployment descoped, licensing in scope).
+  +16 tests (`Unit/Support/VendorApi/VendorApiErrorCodeTest` 11,
+  `Feature/Api/Vendor/VendorApiEnvelopeTest` 4, `Feature/Api/Vendor/PingEndpointTest` 1; suite 146).
+  No migration.
+
 ## Phase 1 — Foundation
 
 - 2026-09-09 — **FEAT-002** — Feature admin CRUD + dependency resolution + config-schema validator.

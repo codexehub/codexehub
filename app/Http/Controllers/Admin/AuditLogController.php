@@ -7,6 +7,7 @@ use App\Models\AuditLog;
 use App\Models\Consultation;
 use App\Models\Customer;
 use App\Models\Feature;
+use App\Models\Installation;
 use App\Models\License;
 use App\Models\LicenseCustomer;
 use App\Models\LicensedApp;
@@ -42,6 +43,7 @@ class AuditLogController extends Controller implements HasMiddleware
         'Product' => Product::class,
         'ProductCategory' => ProductCategory::class,
         'Feature' => Feature::class,
+        'Installation' => Installation::class,
         'Service' => Service::class,
         'Portfolio' => Portfolio::class,
         'PortfolioCategory' => PortfolioCategory::class,

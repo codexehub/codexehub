@@ -30,7 +30,11 @@
 
     $licenseBadge = [
         'active' => 'success',
+        'completed' => 'success',
         'pending' => 'warning',
+        'payment_due' => 'warning',
+        'grace_period' => 'info',
+        'reactivated' => 'info',
         'suspended' => 'secondary',
         'expired' => 'dark',
         'revoked' => 'danger',
@@ -134,7 +138,7 @@
                         <tr>
                             <td><code>{{ $license->license_key }}</code></td>
                             <td>{{ $license->licensedApp?->name ?? '—' }} / {{ $license->package?->name ?? '—' }}</td>
-                            <td><span class="admin-badge admin-badge--{{ $licenseBadge[$license->status] ?? 'info' }}">{{ ucfirst($license->status) }}</span></td>
+                            <td><span class="admin-badge admin-badge--{{ $licenseBadge[$license->status] ?? 'info' }}">{{ ucwords(str_replace('_', ' ', $license->status)) }}</span></td>
                             <td>{{ $license->expires_at?->format('Y-m-d') ?? 'Not set' }}</td>
                             <td>{{ $license->last_verified_at?->diffForHumans() ?? 'Never' }}</td>
                         </tr>

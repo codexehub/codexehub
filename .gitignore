@@ -18,6 +18,7 @@
 /public/storage
 /storage/*.key
 /storage/keys/private.pem
+/storage/keys/vendor-api
 /storage/pail
 /vendor
 Homestead.json

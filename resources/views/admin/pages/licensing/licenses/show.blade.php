@@ -3,13 +3,15 @@
 @section('content')
     @php
         $badge = match ($license->status) {
-            'active' => 'success',
-            'pending' => 'warning',
+            'active', 'completed' => 'success',
+            'pending', 'payment_due' => 'warning',
+            'grace_period', 'reactivated' => 'info',
             'suspended' => 'secondary',
             'expired' => 'dark',
             'revoked' => 'danger',
             default => 'info',
         };
+        $statusLabel = fn (string $status) => ucwords(str_replace('_', ' ', $status));
     @endphp
 
     <div class="admin-page-heading d-flex align-items-start justify-content-between flex-wrap gap-3">
@@ -17,7 +19,7 @@
             <h1><code>{{ $license->license_key }}</code></h1>
             <p>{{ $license->customer->name }} ({{ $license->customer->email }}) &middot; {{ $license->licensedApp->name }} / {{ $license->package->name }}</p>
         </div>
-        <span class="admin-badge admin-badge--{{ $badge }}" style="font-size:.9rem;">{{ strtoupper($license->status) }}</span>
+        <span class="admin-badge admin-badge--{{ $badge }}" style="font-size:.9rem;">{{ strtoupper($statusLabel($license->status)) }}</span>
     </div>
 
     @include('admin.pages.licensing._nav')
@@ -33,12 +35,15 @@
     @endif
 
     <div class="admin-stat-grid">
+        <x-admin::stat-card label="Starts" :value="optional($license->starts_at)->format('Y-m-d') ?? 'Not set'" icon="bi-play-circle" />
         <x-admin::stat-card label="Expires" :value="optional($license->expires_at)->format('Y-m-d') ?? 'Not set'" icon="bi-calendar-event" />
+        <x-admin::stat-card label="Grace Period" :value="$license->grace_period_days !== null ? $license->grace_period_days . ' days' : 'Not set'" icon="bi-hourglass-split" />
+        <x-admin::stat-card label="Next Payment Due" :value="optional($license->next_payment_due)->format('Y-m-d') ?? 'Not set'" icon="bi-cash-stack" />
         <x-admin::stat-card label="Last Verified" :value="optional($license->last_verified_at)->diffForHumans() ?? 'Never'" icon="bi-arrow-repeat" />
         <x-admin::stat-card label="Activations" :value="$license->activations->count() . ' / ' . $license->package->max_activations" icon="bi-hdd-stack" />
     </div>
 
-    <div class="d-flex gap-2 mb-4">
+    <div class="d-flex align-items-center gap-2 mb-4 flex-wrap">
         <a href="{{ route('admin.licensing.licenses.edit', $license) }}" class="btn btn-outline-secondary btn-sm">Edit</a>
 
         @if ($license->status === 'active')
@@ -59,6 +64,19 @@
             <form method="POST" action="{{ route('admin.licensing.licenses.revoke', $license) }}" onsubmit="return confirm('Revoke this license permanently? This cannot be undone from here.')">
                 @csrf
                 <button class="btn btn-outline-danger btn-sm">Revoke</button>
+            </form>
+        @endif
+
+        @if (count($nextStatuses) > 0)
+            <form method="POST" action="{{ route('admin.licensing.licenses.status', $license) }}" class="d-flex align-items-center gap-2 ms-auto">
+                @csrf
+                @method('PATCH')
+                <select name="status" class="form-select form-select-sm" style="width:auto;">
+                    @foreach ($nextStatuses as $next)
+                        <option value="{{ $next }}">{{ $statusLabel($next) }}</option>
+                    @endforeach
+                </select>
+                <button class="btn btn-outline-primary btn-sm">Move to Status</button>
             </form>
         @endif
     </div>

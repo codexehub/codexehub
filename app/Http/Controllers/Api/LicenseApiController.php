@@ -13,9 +13,7 @@ use Illuminate\Support\Carbon;
 
 class LicenseApiController extends Controller
 {
-    public function __construct(private LicenseTokenService $tokens)
-    {
-    }
+    public function __construct(private LicenseTokenService $tokens) {}
 
     /**
      * First-time install call: binds this license to a domain/fingerprint
@@ -58,18 +56,20 @@ class LicenseApiController extends Controller
         }
 
         // Status may have simply timed out since it was last checked.
-        if ($license->status === 'active' && $license->expires_at !== null && $license->expires_at->isPast()) {
-            $license->update(['status' => 'expired']);
+        if ($license->isOperational() && $license->expires_at !== null && $license->expires_at->isPast()) {
+            $license->update(['status' => License::STATUS_EXPIRED]);
         }
 
-        if ($license->status !== 'active') {
+        // PAYMENT_DUE / GRACE_PERIOD / REACTIVATED / COMPLETED stay usable by
+        // design (SRS §45/§46) — only a genuinely locked state blocks here.
+        if (! $license->isOperational()) {
             return response()->json([
                 'status' => $license->status,
                 'message' => match ($license->status) {
-                    'pending' => 'License is awaiting payment confirmation.',
-                    'suspended' => 'License has been suspended.',
-                    'expired' => 'License has expired.',
-                    'revoked' => 'License has been revoked.',
+                    License::STATUS_PENDING => 'License is awaiting payment confirmation.',
+                    License::STATUS_SUSPENDED => 'License has been suspended.',
+                    License::STATUS_EXPIRED => 'License has expired.',
+                    License::STATUS_REVOKED => 'License has been revoked.',
                     default => 'License is not active.',
                 },
             ], 403);
@@ -104,7 +104,7 @@ class LicenseApiController extends Controller
         $license->update(['last_verified_at' => Carbon::now()]);
 
         return response()->json([
-            'status' => 'active',
+            'status' => $license->status,
             'token' => $this->tokens->issue($license, $data['domain']),
             'package' => [
                 'name' => $license->package->name,
