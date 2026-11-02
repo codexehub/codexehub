@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Laravel 12 project. PHP 8.2, MySQL (`.env` currently sets `DB_CONNECTION=mysql`, host 127.0.0.1:3306, db `codexehub` — despite this file previously saying SQLite; avoid SQLite-only SQL like `strftime()`, use driver-aware raw expressions or query builder date helpers instead).
+Laravel 13 project. PHP 8.5.12 (use `C:\laragon\bin\php\php-8.5.12-Win32-vs17-x64\php.exe` — the default `php` on PATH is XAMPP 8.2 and will not run this app), MySQL (`.env` currently sets `DB_CONNECTION=mysql`, host 127.0.0.1:3306, db `codexehub` — despite this file previously saying SQLite; avoid SQLite-only SQL like `strftime()`, use driver-aware raw expressions or query builder date helpers instead).
 
 ## Commands
 - Serve: `php artisan serve`
